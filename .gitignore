@@ -4,3 +4,4 @@
 *.scss.map
 .idea/
 __pycache__/
+*.css
