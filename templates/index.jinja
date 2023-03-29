@@ -1,0 +1,15 @@
+{% extends "base.jinja" %}
+
+{% block contenu %}
+<header>
+    <h1>Binette Book</h1>
+</header>
+
+<main>
+    {% for u in utilisateurs %}
+    <p>
+        <a href="/mur/{{ u.id_utilisateur }}">Voir le mur de {{ u.nom }}</a>
+    </p>
+    {% endfor %}
+</main>
+{% endblock %}

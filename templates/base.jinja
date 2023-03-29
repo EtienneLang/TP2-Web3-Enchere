@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+    <title>Binette Book</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://www.cegepgarneau.ca/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+
+<body>
+    <header>
+        {% if not session.utilisateur %}
+            <div><a href="/compte/authentifier">Se Connecter</a></div>
+        {% else %}
+            <div><h1>{{ session.utilisateur.nom }}</h1><a href="/compte/deconnecter">Se déconnecter</a></div>
+        {% endif %}
+    </header>
+    {% block contenu %}
+    {% endblock %}
+</body>
+
+</html>
