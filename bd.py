@@ -1,7 +1,7 @@
 """
 Connexion à la BD
 """
-
+import datetime
 import types
 import contextlib
 import mysql.connector
@@ -15,7 +15,7 @@ def creer_connexion():
         user="garneau",
         password="qwerty123",
         host="127.0.0.1",
-        database="binette_book",
+        database="tp2_enchere",
         raise_on_warnings=True
     )
 
@@ -60,21 +60,19 @@ def get_utilisateur(conn, identifiant):
             }
         )
         return curseur.fetchone()
-def get_amis(conn, identifiant):
-    """Retourne tous les amis d'un utilisateur"""
+
+
+def get_encheres(conn):
+    """Retourne toutes les enchères dans la bd"""
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT id_utilisateur,nom FROM utilisateur INNER JOIN " +
-            "( " +
-            " SELECT fk_utilisateur as ami FROM `amitie` WHERE fk_ami=%(id)s " +
-            " UNION "+
-            " SELECT fk_ami as ami FROM `amitie` WHERE fk_utilisateur=%(id)s " +
-            ") Foo on id_utilisateur=ami;",
-            {
-                "id": identifiant
-            }
+            "SELECT * FROM `enchere` ORDER BY date_limite DESC"
         )
-        return curseur.fetchall()
+        encheres = curseur.fetchall()
+        for e in encheres:
+            if e['date_limite'] >= datetime.date.today():
+                e['est_active'] = True
+        return encheres
 
 
 def get_messages_pour(conn, identifiant):
