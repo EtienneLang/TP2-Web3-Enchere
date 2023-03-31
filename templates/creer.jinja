@@ -1,0 +1,16 @@
+{% extends "base.jinja" %}
+{% block contenu %}
+    <h2>Création d'un compte</h2>
+    <form action="/compte/creer" method="post" class="d-flex flex-column w-50" novalidate>
+        <label for="email">Courriel</label>
+        <input type="email" name="courriel" id="courriel" value="{{ email }}">
+        <label for="nom">Nom</label>
+        <input type="text" name="nom" id="nom" value="{{ nom }}">
+        <label for="mdp">Mot de passe</label>
+        <input class="{{ classe_mdp }}" type="password" name="mdp" id="mdp">
+        <label for="mdp2">Confirmer le mot de passe</label>
+        <input class="{{ classe_mdp }}" type="password" name="mdp2" id="mdp2">
+        <div class="invalid-feedback">Les mots de passe ne concordent pas</div>
+        <input type="submit" class="button btn-primary">
+    </form>
+{% endblock %}

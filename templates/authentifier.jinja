@@ -1,9 +1,8 @@
 {% extends "base.jinja" %}
 {% block contenu %}
-
+    <h2 class="p-5">Authentification</h2>
     <div class="d-flex align-items-center flex-column p-5">
-        <h1 class="p-5">Authentification</h1>
-        <form action="/compte/authentifier" method="post" class="d-flex flex-column w-50 ">
+        <form action="/compte/authentifier" method="post" class="d-flex flex-column w-50" novalidate>
             <label for="txtnom">Nom utilisateur</label>
             <input type="email" name="courriel" id="courriel" value="{{ courriel }}" class="{{ classe_courriel}} form-control-lg"/>
             <label for="mdp">Mot de passe</label>

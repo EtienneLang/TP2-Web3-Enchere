@@ -31,6 +31,30 @@ def authentifier():
         return render_template("authentifier.jinja")
 
 
+@bp_compte.route("/creer", methods=["Get", "Post"])
+def creer_compte():
+    """Permets de créer un compte"""
+    if request.method == "GET":
+        return render_template("creer.jinja")
+
+    nom = request.form.get("nom", default="")
+    courriel = request.form.get("courriel", default="")
+    mdp = request.form.get("mdp")
+    mdp2 = request.form.get("mdp2")
+    if not mdp == mdp2:
+        return render_template("creer.jinja", nom=nom, courriel=courriel, classe_mdp="is-invalid")
+    mdp = hacher_mdp(mdp)
+    utilisateur = {
+        "courriel": courriel,
+        "nom": nom,
+        "mdp": mdp
+    }
+    with bd.creer_connexion() as conn:
+        utilisateur["id"] = bd.creer_compte(conn, utilisateur)
+    session["utilisateur"] = utilisateur
+    return redirect("/", code=303)
+
+
 @bp_compte.route("/deconnecter")
 def deconnecter():
     session["utilisateur"].clear()
