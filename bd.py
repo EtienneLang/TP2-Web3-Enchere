@@ -115,6 +115,8 @@ def ajouter_amitie(conn, id1, id2):
             "id2": id2
             }
         )
+
+
 def authentifier(conn, courriel, mdp):
     with conn.get_curseur() as curseur:
         curseur.execute(

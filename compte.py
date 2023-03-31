@@ -1,18 +1,42 @@
-from flask import Blueprint, render_template, request, redirect, abort
-from app import session
+from flask import Blueprint, render_template, request, redirect, abort, session
 import hashlib
 import bd
 
 bp_compte = Blueprint('compte', __name__)
-bp_compte.secret_key = "464b2822f3de9cee02fa8a451e18c46ff3db4a0893253c0a54a527c8aa24be93"
 
-@bp_compte.route("/authentifier", methods=["POST","GET"])
+
+@bp_compte.route("/authentifier", methods=["GET", "Post"])
 def authentifier():
-
-    return render_template("authentifier.jinja")
+    """Permets d'autentifier un utilisateur"""
+    if request.method == "POST":
+        courriel = request.form.get("courriel", default="")
+        if len(courriel) == 0:
+            return render_template("authentifier.jinja", classe_courriel="is-invalid",
+                                   texte_invalide="Veuillez entrez votre adresse email")
+        mdp = request.form.get("mdp")
+        if not mdp:
+            return render_template("authentifier.jinja", classe_mdp="is-invalid",
+                                   texte_invalide="Veuillez entrer un mot de passe", courriel=courriel)
+        mdp = hacher_mdp(mdp)
+        with bd.creer_connexion() as conn:
+            utilisateur = bd.authentifier(conn, courriel, mdp)
+            if not utilisateur:
+                return render_template("authentifier.jinja", courriel=courriel, classe_mdp="is-invalid",
+                                       texte_invalide="Le mot de passe ou l'adresse courriel est invalide")
+            else:
+                session.permanent = True
+                session["utilisateur"] = utilisateur
+                return redirect("/", code=303)
+    else:
+        return render_template("authentifier.jinja")
 
 
 @bp_compte.route("/deconnecter")
 def deconnecter():
     session["utilisateur"].clear()
     return redirect("/")
+
+
+def hacher_mdp(mdp_en_clair):
+    """Prend un mot de passe en clair et lui applique une fonction de hachage"""
+    return hashlib.sha512(mdp_en_clair.encode()).hexdigest()
