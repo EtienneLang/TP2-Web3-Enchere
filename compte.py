@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, abort, session
 import hashlib
 import bd
+import re
 
 bp_compte = Blueprint('compte', __name__)
+reg_email = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 
 
 @bp_compte.route("/authentifier", methods=["GET", "Post"])
@@ -36,11 +38,19 @@ def creer_compte():
     """Permets de créer un compte"""
     if request.method == "GET":
         return render_template("creer.jinja")
-
     nom = request.form.get("nom", default="")
     courriel = request.form.get("courriel", default="")
     mdp = request.form.get("mdp")
     mdp2 = request.form.get("mdp2")
+    form_valide = True
+    if len(courriel) <= 50:
+        classe_courriel = "is-invalid"
+        texte_courriel = "Votre adresse courriel ne peut pas contenir plus de 50 caractères"
+        form_valide = False
+    elif reg_email.fullmatch(courriel):
+        classe_courriel = "is-invalid"
+        texte_courriel = "L'adresse courriel ne doit pas contenir de champs interdits et doit être valide"
+        form_valide = False
     if not mdp == mdp2:
         return render_template("creer.jinja", nom=nom, courriel=courriel, classe_mdp="is-invalid")
     mdp = hacher_mdp(mdp)
