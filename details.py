@@ -8,5 +8,6 @@ bp_details = Blueprint('details', __name__)
 def details(id):
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id)
+        mise_max = bd.get_mise_max(conn, id)
 
-    return render_template("details.jinja", enchere = enchere)
+    return render_template("details.jinja", enchere = enchere, mise_max=mise_max)
