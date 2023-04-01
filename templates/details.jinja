@@ -1,0 +1,11 @@
+{% extends "base.jinja" %}
+
+{% block contenu %}
+    <div>
+        <h1>{{ enchere.titre }}</h1>
+        <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" alt="Image pour l'enchère {{ enchere.titre }}">
+        <p>{{ enchere.description }}</p>
+        <p>Date limite : {{ enchere.date_limite }}</p>
+        <h2>Mise la plus haute pour cette enchère : {{ enchere }}</h2>
+    </div>
+{% endblock %}
