@@ -1,25 +1,28 @@
 {% extends "base.jinja" %}
 
 {% block contenu %}
-<section class="section-accueil">
+<section>
     <div class="text-center">
         <h1 class="my-3">Le royaume des enchères</h1>
         <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
     </div>
-    {% for e in encheres %}
-        <div class="card text-center" style="width: 20rem;">
-            <div class="card-header">
-                <h5>{{ e.titre }}</h5>
+    <div class="section-accueil">
+        {% for e in encheres %}
+            <div class="card text-center" style="width: 20rem;">
+                <div class="card-header">
+                    <h5>{{ e.titre }}</h5>
+                </div>
+                <div class="card-body">
+                    <img src="https://picsum.photos/seed/{{ e.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ e.titre }}">
+                    <p class="card-text my-3">{{ e.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <p>Date limite : {{ e.date_limite }}</p>
+                    <a href="/details/{{ e.id_enchere }}" class="card-link">Voir cette enchère</a>
+                </div>
             </div>
-            <div class="card-body">
-                <img src="https://picsum.photos/seed/{{ e.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ e.titre }}">
-                <p class="card-text my-3">{{ e.description }}</p>
-            </div>
-            <div class="card-footer">
-                <p>Date limite : {{ e.date_limite }}</p>
-                <a href="#" class="card-link">Voir cette enchère</a>
-            </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
 </section>
 {% endblock %}

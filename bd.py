@@ -61,6 +61,16 @@ def get_utilisateur(conn, identifiant):
         )
         return curseur.fetchone()
 
+def get_mise_max(conn, identifiant):
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "SELECT MAX(montant) as max,fk_miseur  FROM mise WHERE fk_enchere=%(id)s",
+            {
+                "id":identifiant
+            }
+        )
+        return curseur.fetchone()
+
 
 def get_encheres(conn):
     """Retourne toutes les enchères dans la bd"""
@@ -74,6 +84,19 @@ def get_encheres(conn):
                 e['est_active'] = True
         return encheres
 
+def get_enchere(conn, identifiant):
+    """Retourne une enchère en fonction de l'id en paramètre"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "SELECT * FROM `enchere` WHERE id_enchere = %(id)s",
+            {
+                "id" : identifiant
+            }
+        )
+        enchere = curseur.fetchone()
+        if enchere['date_limite'] >= datetime.date.today():
+            enchere['est_active'] = True
+        return enchere
 
 def get_messages_pour(conn, identifiant):
     """Retourne les messages pour un utilisateur"""

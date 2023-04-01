@@ -1,0 +1,24 @@
+{% extends "base.jinja" %}
+
+{% block contenu %}
+    <div class="d-flex justify-content-around m-5">
+        <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" alt="Image pour l'enchère {{ enchere.titre }}">
+        <div class="p-4">
+            <h1>{{ enchere.titre }}</h1>
+            <p>{{ enchere.description }}</p>
+            <p>Date limite : {{ enchere.date_limite }}</p>
+            <h2>Mise la plus haute pour cette enchère : {{ mise.max }}</h2>
+            {% if enchere.est_active == True%}
+                <p><i><strong>L'enchère est active</strong></i></p>
+            {% else %}
+                <p><i>L'enchère n'est pas active pour le moment</i></p>
+            {% endif %}
+
+            {% if session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
+                <button class="btn btn-primary">Miser</button>
+            {% elif  enchere.fk_vendeur == session.utilisateur.id_utilisateur%}
+                <p>Le plus haut miseur sur votre article : {{ vendeur.nom }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
