@@ -64,7 +64,7 @@ def get_utilisateur(conn, identifiant):
 def get_mise_max(conn, identifiant):
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT MAX(montant) as max FROM mise WHERE fk_enchere=%(id)s",
+            "SELECT MAX(montant) as max,fk_miseur  FROM mise WHERE fk_enchere=%(id)s",
             {
                 "id":identifiant
             }

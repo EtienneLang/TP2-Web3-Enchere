@@ -7,11 +7,15 @@
             <h1>{{ enchere.titre }}</h1>
             <p>{{ enchere.description }}</p>
             <p>Date limite : {{ enchere.date_limite }}</p>
-            <h2>Mise la plus haute pour cette enchère : {{ mise_max.max }} $</h2>
+            <h2>Mise la plus haute pour cette enchère : {{ mise.max }} $</h2>
             {% if enchere.est_active == True%}
                 <p><i><strong>L'enchère est active</strong></i></p>
             {% else %}
                 <p><i>L'enchère n'est pas active pour le moment</i></p>
+            {% endif %}
+
+            {% if session.utilisateur and enchere.est_active and mise.fk_miseur != session.utilisateur.id_utilisateur%}
+                <button class="btn btn-primary">Miser</button>
             {% endif %}
         </div>
     </div>
