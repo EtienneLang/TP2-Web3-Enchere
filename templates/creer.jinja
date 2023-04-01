@@ -5,16 +5,20 @@
         <form action="/compte/creer" method="post" class="w-50" novalidate>
             <div class="row">
                 <div class="col">
-                    <label for="email">Courriel</label>
-                    <input type="email" name="courriel" id="courriel" value="{{ email }}" class="form-control">
+                    <label for="courriel">Courriel</label>
+                    <input type="email" name="courriel" id="courriel" value="{{ invalidation.courriel }}" class="form-control {{ invalidation.classe_courriel }}">
+                    <div class="invalid-feedback"><p>{{ invalidation.texte_courriel }}</p></div>
                     <label for="nom">Nom</label>
-                    <input type="text" name="nom" id="nom" value="{{ nom }}" class="form-control">
+                    <input type="text" name="nom" id="nom" value="{{ invalidation.nom }}" class="form-control {{ invalidation.classe_nom }}">
+                    <div class="invalid-feedback"><p>{{ invalidation.texte_nom }}</p></div>
                 </div>
                 <div class="col">
                     <label for="mdp">Mot de passe</label>
-                    <input class="{{ classe_mdp }} form-control" type="password" name="mdp" id="mdp">
+                    <input class="{{ invalidation.classe_mdp }} form-control" type="password" name="mdp" id="mdp">
+                    <div class="invalid-feedback"><p>{{ invalidation.texte_mdp }}</p></div>
                     <label for="mdp2">Confirmer le mot de passe</label>
-                    <input class="{{ classe_mdp }} form-control" type="password" name="mdp2" id="mdp2">
+                    <input class="{{ invalidation.classe_mdp2 }} form-control" type="password" name="mdp2" id="mdp2">
+                    <div class="invalid-feedback"><p>{{ invalidation.texte_mdp2 }}</p></div>
                 </div>
             </div>
             <div class="invalid-feedback">{{ texte_invalide }}</div>

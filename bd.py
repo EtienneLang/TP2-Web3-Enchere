@@ -127,19 +127,6 @@ def ajouter_message(conn, auteur, destinataire, contenu):
         )
 
 
-def ajouter_amitie(conn, id1, id2):
-    """Ajoute un lien d'amitié entre id1 et id2"""
-    with conn.get_curseur() as curseur:
-        curseur.execute(
-            "INSERT INTO amitie " +
-            "(fk_utilisateur, fk_ami) VALUES (%(id1)s, %(id2)s)",
-            {
-            "id1": id1,
-            "id2": id2
-            }
-        )
-
-
 def authentifier(conn, courriel, mdp):
     with conn.get_curseur() as curseur:
         curseur.execute(
@@ -150,3 +137,29 @@ def authentifier(conn, courriel, mdp):
             }
         )
         return curseur.fetchone()
+
+
+def creer_compte(conn, utilisateur):
+    """Permets d'ajouter un compte à la bd"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "INSERT INTO utilisateur (id_utilisateur, courriel, nom, mdp) VALUES (NULL, %(courriel)s, %(nom)s, %(mdp)s)",
+            {
+                "courriel": utilisateur["courriel"],
+                "nom": utilisateur["nom"],
+                "mdp": utilisateur["mdp"]
+            }
+        )
+        return curseur.lastrowid
+
+
+def verifier_courriel(conn, courriel):
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "SELECT * FROM utilisateur WHERE courriel=%(courriel)s",
+            {
+                "courriel": courriel
+            }
+        )
+        return curseur.fetchone()
+
