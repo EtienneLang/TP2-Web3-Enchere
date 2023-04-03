@@ -72,7 +72,17 @@ def get_mise_max(conn, identifiant):
         )
         return curseur.fetchone()
 
-
+def ajouter_mise(conn, miseur, enchere, montant):
+    """Ajoute une mise dans la table mise"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "INSERT INTO mise(fk_miseur, fk_enchere, montant) VALUES (%(fk_miseur)s, %(fk_enchere)s, %(montant)s)",
+            {
+                "fk_miseur": miseur,
+                "fk_enchere": enchere,
+                "montant": montant
+            }
+        )
 def get_encheres(conn):
     """Retourne toutes les enchères dans la bd"""
     with conn.get_curseur() as curseur:
