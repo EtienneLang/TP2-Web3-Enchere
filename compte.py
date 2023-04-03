@@ -58,8 +58,28 @@ def creer_compte():
 
 @bp_compte.route("/deconnecter")
 def deconnecter():
+    """Permets de déconnecter un utilisateur"""
     session["utilisateur"].clear()
     return redirect("/")
+
+
+@bp_compte.route("/encheres")
+def afficher_encheres_utilisateur():
+    """Permets d'afficher la page des enchères d'un utilisateur"""
+    if not session["utilisateur"]:
+        return redirect("/compte/authentifier")
+    with bd.creer_connexion() as conn:
+        encheres = bd.get_encheres_utilisateur(conn, session['utilisateur']['id_utilisateur'])
+        for e in encheres:
+            mise_max = bd.get_mise_max(conn, e["id_enchere"])
+            if mise_max["max"]:
+                acheteur = bd.get_utilisateur(conn, mise_max["fk_miseur"])
+                nom = acheteur["nom"]
+                e["nom"] = nom
+                e["mise_max"] = mise_max["max"]
+            else:
+                e["mise_max"] = False
+    return render_template("encheres.jinja", encheres=encheres)
 
 
 def hacher_mdp(mdp_en_clair):

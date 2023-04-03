@@ -12,6 +12,6 @@ def details(id):
         if mise["max"] is None:
             mise["max"] = "Aucune"
 
-        vendeur= bd.get_utilisateur(conn, enchere["fk_vendeur"])
+        vendeur = bd.get_utilisateur(conn, enchere["fk_vendeur"])
 
-    return render_template("details.jinja", enchere = enchere, mise=mise, vendeur=vendeur)
+    return render_template("details.jinja", enchere=enchere, mise=mise, vendeur=vendeur)

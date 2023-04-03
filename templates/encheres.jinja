@@ -1,0 +1,11 @@
+{% extends "base.jinja" %}
+{% from "card-enchere.jinja" import afficher_enchere_utilisateur %}
+{% block contenu %}
+<section class="section-mes-encheres">
+    <div class="section-accueil">
+        {% for e in encheres %}
+            {{ afficher_enchere_utilisateur(e) }}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

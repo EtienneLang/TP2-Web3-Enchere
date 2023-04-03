@@ -61,12 +61,13 @@ def get_utilisateur(conn, identifiant):
         )
         return curseur.fetchone()
 
+
 def get_mise_max(conn, identifiant):
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT MAX(montant) as max,fk_miseur  FROM mise WHERE fk_enchere=%(id)s",
             {
-                "id":identifiant
+                "id": identifiant
             }
         )
         return curseur.fetchone()
@@ -80,9 +81,9 @@ def get_encheres(conn):
         )
         encheres = curseur.fetchall()
         for e in encheres:
-            if e['date_limite'] >= datetime.date.today():
-                e['est_active'] = True
+            verifier_si_enchere_active(e)
         return encheres
+
 
 def get_enchere(conn, identifiant):
     """Retourne une enchère en fonction de l'id en paramètre"""
@@ -90,41 +91,27 @@ def get_enchere(conn, identifiant):
         curseur.execute(
             "SELECT * FROM `enchere` WHERE id_enchere = %(id)s",
             {
-                "id" : identifiant
-            }
-        )
-        enchere = curseur.fetchone()
-        if enchere['date_limite'] >= datetime.date.today():
-            enchere['est_active'] = True
-        return enchere
-
-def get_messages_pour(conn, identifiant):
-    """Retourne les messages pour un utilisateur"""
-    with conn.get_curseur() as curseur:
-        curseur.execute(
-            "SELECT contenu, nom, fk_auteur FROM message " +
-            "INNER JOIN utilisateur on fk_auteur=id_utilisateur " +
-            "WHERE fk_destinataire=%(id)s",
-            {
                 "id": identifiant
             }
         )
-        return curseur.fetchall()
+        enchere = curseur.fetchone()
+        verifier_si_enchere_active(enchere)
+        return enchere
 
 
-
-def ajouter_message(conn, auteur, destinataire, contenu):
-    """Pour ajouter un message à un utilisateur"""
+def get_encheres_utilisateur(conn, id_utilisateur):
+    """Retourne toutes les enchères d'un utilisateur"""
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "INSERT INTO message (contenu, fk_auteur, fk_destinataire) " +
-            "VALUES (%(contenu)s, %(fk_auteur)s, %(fk_destinataire)s)",
+            "SELECT * FROM enchere WHERE fk_vendeur = %(id_utilisateur)s ORDER BY date_limite DESC",
             {
-                "contenu": contenu,
-                "fk_auteur": auteur,
-                "fk_destinataire": destinataire
+                "id_utilisateur": id_utilisateur
             }
         )
+        encheres = curseur.fetchall()
+        for e in encheres:
+            verifier_si_enchere_active(e)
+        return encheres
 
 
 def authentifier(conn, courriel, mdp):
@@ -162,4 +149,14 @@ def verifier_courriel(conn, courriel):
             }
         )
         return curseur.fetchone()
+
+
+def verifier_si_enchere_active(enchere):
+    """Permets de vérifier si une enchère est active"""
+    if enchere['date_limite'] >= datetime.date.today():
+        enchere['est_active'] = True
+    else:
+        enchere['est_active'] = False
+    return enchere
+
 
