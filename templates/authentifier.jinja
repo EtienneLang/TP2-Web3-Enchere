@@ -1,18 +1,31 @@
 {% extends "base.jinja" %}
 {% block contenu %}
-    <h2 class="p-5">Authentification</h2>
-    <div class="d-flex align-items-center flex-column p-5">
-        <form action="/compte/authentifier" method="post" class="d-flex flex-column w-50" novalidate>
-            <label for="txtnom">Nom utilisateur</label>
-            <input type="email" name="courriel" id="courriel" value="{{ courriel }}" class="{{ classe_courriel}} form-control-lg"/>
-            <label for="mdp">Mot de passe</label>
-            <input type="password" name="mdp"id="mdp" class="{{ classe_mdp }} form-control-lg"/>
-            <div class="invalid-feedback">
-                <p>{{ texte_invalide }}</p>
+    <section class="section-authentification">
+        <h2 class="my-3">Authentification</h2>
+        <form action="/compte/authentifier" method="post" class="w-50" novalidate>
+            <div class="row">
+                <div class="col">
+                    <div class="style-input">
+                        <label for="txtnom">Adresse courriel</label>
+                        <input type="email" name="courriel" id="courriel" value="{{ courriel }}" class="{{ classe_courriel}} form-control"/>
+                    </div>
+                    <div class="style-input">
+                        <label for="mdp">Mot de passe</label>
+                        <input type="password" name="mdp"id="mdp" class="{{ classe_mdp }} form-control"/>
+                    </div>
+                    <div class="invalid-feedback">
+                        <p>{{ texte_invalide }}</p>
+                    </div>
+                </div>
             </div>
-            <button class="btn btn-primary mt-3" type="submit" class="mt-3">Se connecter</button>
+            <div class="d-flex justify-content-center">
+                <input type="submit" class="button btn-primary mb-3" value="Se connecter">
+            </div>
+
         </form>
-    </div>
+
+    </section>
+
 
 
 {% endblock %}

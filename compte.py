@@ -49,7 +49,9 @@ def creer_compte():
                                )
     utilisateur = invalidation
     with bd.creer_connexion() as conn:
-        utilisateur["id_utilisateur"] = bd.creer_compte(conn, utilisateur)
+        id = bd.creer_compte(conn, utilisateur)
+        # pour avoir le champ est_admin
+        utilisateur = bd.get_utilisateur(conn, id)
     session["utilisateur"] = utilisateur
     return redirect("/", code=303)
 
