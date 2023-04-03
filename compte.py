@@ -66,7 +66,7 @@ def deconnecter():
 @bp_compte.route("/encheres")
 def afficher_encheres_utilisateur():
     """Permets d'afficher la page des enchères d'un utilisateur"""
-    if not session["utilisateur"]:
+    if not session or not session["utilisateur"]:
         return redirect("/compte/authentifier")
     with bd.creer_connexion() as conn:
         encheres = bd.get_encheres_utilisateur(conn, session['utilisateur']['id_utilisateur'])
@@ -79,6 +79,13 @@ def afficher_encheres_utilisateur():
             else:
                 e["mise_max"] = None
     return render_template("encheres.jinja", encheres=encheres)
+
+
+@bp_compte.route("/mises")
+def afficher_mises_utilisateur():
+    if not session or not session["utilisateur"]:
+        return redirect("/compte/authentifier")
+    return render_template()
 
 
 def hacher_mdp(mdp_en_clair):
