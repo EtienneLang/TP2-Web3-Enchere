@@ -74,11 +74,10 @@ def afficher_encheres_utilisateur():
             mise_max = bd.get_mise_max(conn, e["id_enchere"])
             if mise_max["max"]:
                 acheteur = bd.get_utilisateur(conn, mise_max["fk_miseur"])
-                nom = acheteur["nom"]
-                e["nom"] = nom
+                e["acheteur"] = acheteur["nom"]
                 e["mise_max"] = mise_max["max"]
             else:
-                e["mise_max"] = False
+                e["mise_max"] = None
     return render_template("encheres.jinja", encheres=encheres)
 
 

@@ -24,9 +24,15 @@
 
 {% macro afficher_enchere_utilisateur(enchere) %}
     <div class="card text-center card-enchere" style="width: 20rem;">
-        {% if enchere.est_active %}
+        {% if enchere.est_supprimee %}
             <div class="card-header">
                 <h5>{{ enchere.titre }}</h5>
+                <p> Supprimée par un administrateur</p>
+            </div>
+        {% elif enchere.est_active %}
+            <div class="card-header">
+                <h5>{{ enchere.titre }}</h5>
+                <p>Active</p>
             </div>
         {% else %}
             <div class="card-header enchere-inactive">
@@ -36,11 +42,29 @@
         {% endif %}
         <div class="card-body">
             <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ enchere.titre }}">
-            <p class="card-text my-3">{{ enchere.description }}</p>
+        </div>
+        <div class="card-body">
+            {% if enchere.mise_max %}
+                {% if enchere.est_active %}
+                    <p>Meilleure mise : {{ enchere.mise_max }}$</p>
+                    <p>Par {{ enchere.acheteur }}</p>
+                {% else %}
+                    <p>Vendu pour : {{ enchere.mise_max }}$</p>
+                    <p>À {{ enchere.acheteur }}</p>
+                {% endif %}
+            {% else %}
+                {% if enchere.est_active %}
+                    <p>Aucune mise placée</p>
+                {% else %}
+                    <p>L'item n'a pas été acheté</p>
+                {% endif %}
+            {% endif %}
         </div>
         <div class="card-footer">
             <p>Date limite : {{ enchere.date_limite }}</p>
-            <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            {% if not enchere.est_supprimee %}
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}
