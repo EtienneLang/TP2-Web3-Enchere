@@ -15,7 +15,10 @@
             {% endif %}
 
             {% if session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
-                <button class="btn btn-primary">Miser</button>
+                <form action="/details/{{ enchere.id_enchere }}/miser" method="POST">
+                    <input type="text" placeholder="Somme de la mise" id="txt_mise" name="txt_mise">
+                    <button class="btn btn-primary">Miser</button>
+                </form>
             {% elif  enchere.fk_vendeur == session.utilisateur.id_utilisateur%}
                 <p>Le plus haut miseur sur votre article : {{ vendeur.nom }}</p>
             {% endif %}
