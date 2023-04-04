@@ -9,7 +9,7 @@ def details(id):
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id)
         mise = bd.get_mise_max(conn, id)
-        if mise["max"] is None:
+        if not mise:
             mise["max"] = "Aucune"
 
         vendeur = bd.get_utilisateur(conn, enchere["fk_vendeur"])

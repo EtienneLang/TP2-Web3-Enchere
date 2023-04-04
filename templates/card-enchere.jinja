@@ -25,7 +25,7 @@
 {% macro afficher_enchere_utilisateur(enchere) %}
     <div class="card text-center card-enchere" style="width: 20rem;">
         {% if enchere.est_supprimee %}
-            <div class="card-header">
+            <div class="card-header enchere-inactive">
                 <h5>{{ enchere.titre }}</h5>
                 <p> Supprimée par un administrateur</p>
             </div>
@@ -60,11 +60,44 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% if enchere.est_supprimee %}
+            <div class="card-footer enchere-inactive">
+            <p>Date limite : {{ enchere.date_limite }}</p>
+        </div>
+        {% elif enchere.est_active %}
+            <div class="card-footer enchere-inactive">
+                <p>Date limite : {{ enchere.date_limite }}</p>
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% else %}
+            <div class="card-footer">
+                <p>Date limite : {{ enchere.date_limite }}</p>
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro afficher_mises_utilisateur(mise) %}
+     <div class="card text-center card-enchere" style="width: 20rem;">
+        {% if enchere.est_active %}
+            <div class="card-header">
+                <h5>{{ enchere.titre }}</h5>
+
+            </div>
+        {% else %}
+            <div class="card-header enchere-inactive">
+                <h5>{{ enchere.titre }}</h5>
+                <p>Inactive</p>
+            </div>
+        {% endif %}
+        <div class="card-body">
+            <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ enchere.titre }}">
+            <p class="card-text my-3">{{ enchere.description }}</p>
+        </div>
         <div class="card-footer">
             <p>Date limite : {{ enchere.date_limite }}</p>
-            {% if not enchere.est_supprimee %}
-                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
-            {% endif %}
+            <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
         </div>
     </div>
 {% endmacro %}

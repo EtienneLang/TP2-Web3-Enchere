@@ -72,10 +72,10 @@ def afficher_encheres_utilisateur():
         encheres = bd.get_encheres_utilisateur(conn, session['utilisateur']['id_utilisateur'])
         for e in encheres:
             mise_max = bd.get_mise_max(conn, e["id_enchere"])
-            if mise_max["max"]:
+            if mise_max:
                 acheteur = bd.get_utilisateur(conn, mise_max["fk_miseur"])
                 e["acheteur"] = acheteur["nom"]
-                e["mise_max"] = mise_max["max"]
+                e["mise_max"] = mise_max["montant"]
             else:
                 e["mise_max"] = None
     return render_template("encheres.jinja", encheres=encheres)
@@ -83,9 +83,21 @@ def afficher_encheres_utilisateur():
 
 @bp_compte.route("/mises")
 def afficher_mises_utilisateur():
-    if not session or not session["utilisateur"]:
+    if not session["utilisateur"]:
         return redirect("/compte/authentifier")
-    return render_template()
+    with bd.creer_connexion() as conn:
+        mises = bd.get_mises_utilisateur(conn, session["utilisateur"]["id_utilisateur"])
+    with bd.creer_connexion() as conn:
+        for m in mises:
+            mise_max = bd.get_mise_max(conn, m["id_enchere"])
+            print(f"mise max : {mise_max}")
+            print(f"mise : {m}")
+            if mise_max:
+                if mise_max["fk_miseur"] == session["utilisateur"]["id_utilisateur"]:
+                    m["enchere_perdu"] = None
+                else:
+                    m["enchere_perdu"] = "enchere_perdu"
+    return render_template("mises.jinja")
 
 
 def hacher_mdp(mdp_en_clair):

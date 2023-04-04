@@ -65,9 +65,11 @@ def get_utilisateur(conn, identifiant):
 def get_mise_max(conn, identifiant):
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT MAX(montant) as max,fk_miseur  FROM mise WHERE fk_enchere=%(id)s",
+            "SELECT m.* FROM mise m LEFT OUTER JOIN mise m2 "
+            "ON m.fk_enchere = m2.fk_enchere AND m.montant < m2.montant"
+            " WHERE m2.fk_enchere IS NULL AND m.fk_enchere = %(id_enchere)s",
             {
-                "id": identifiant
+                "id_enchere": identifiant
             }
         )
         return curseur.fetchone()
@@ -159,6 +161,19 @@ def verifier_courriel(conn, courriel):
             }
         )
         return curseur.fetchone()
+
+
+def get_mises_utilisateur(conn, id_utilisateur):
+    """Retourne les mises d'un utilisateur"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "SELECT DISTINCT e.*, m.* FROM enchere e INNER JOIN mise m"
+            " ON fk_enchere = e.id_enchere WHERE fk_miseur = %(id_utilisateur)s",
+            {
+                "id_utilisateur": id_utilisateur
+            }
+        )
+        return curseur.fetchall()
 
 
 def verifier_si_enchere_active(enchere):
