@@ -1,11 +1,18 @@
 {% extends "base.jinja" %}
 {% from "card-enchere.jinja" import afficher_enchere_utilisateur %}
 {% block contenu %}
+<h2 class="text-center mt-3">Voici vos enchères</h2>
 <section class="section-mes-encheres">
+    {% if encheres %}
     <div class="section-accueil">
         {% for e in encheres %}
             {{ afficher_enchere_utilisateur(e) }}
         {% endfor %}
     </div>
+    {% else %}
+        <div class="texte-vide">
+            <h3>Vous n'avez pas encore ajouté d'enchères</h3>
+        </div>
+    {% endif %}
 </section>
 {% endblock %}

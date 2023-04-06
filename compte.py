@@ -89,15 +89,14 @@ def afficher_mises_utilisateur():
         mises = bd.get_mises_utilisateur(conn, session["utilisateur"]["id_utilisateur"])
     with bd.creer_connexion() as conn:
         for m in mises:
+            bd.verifier_si_enchere_active(m)
             mise_max = bd.get_mise_max(conn, m["id_enchere"])
-            print(f"mise max : {mise_max}")
-            print(f"mise : {m}")
-            if mise_max:
-                if mise_max["fk_miseur"] == session["utilisateur"]["id_utilisateur"]:
-                    m["enchere_perdu"] = None
-                else:
-                    m["enchere_perdu"] = "enchere_perdu"
-    return render_template("mises.jinja")
+            if mise_max["fk_miseur"] == session["utilisateur"]["id_utilisateur"]:
+                m["enchere_leader"] = True
+            else:
+                m["enchere_leader"] = False
+                m["montant_max"] = mise_max["montant"]
+    return render_template("mises.jinja", mises=mises)
 
 
 def hacher_mdp(mdp_en_clair):

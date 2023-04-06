@@ -72,7 +72,10 @@ def get_mise_max(conn, identifiant):
                 "id_enchere": identifiant
             }
         )
-        return curseur.fetchone()
+        mise_max = curseur.fetchone()
+        donnees_inutiles = curseur.fetchall()
+        return mise_max
+
 
 def ajouter_mise(conn, miseur, enchere, montant):
     """Ajoute une mise dans la table mise"""
@@ -168,7 +171,7 @@ def get_mises_utilisateur(conn, id_utilisateur):
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT DISTINCT e.*, m.* FROM enchere e INNER JOIN mise m"
-            " ON fk_enchere = e.id_enchere WHERE fk_miseur = %(id_utilisateur)s",
+            " ON fk_enchere = e.id_enchere WHERE fk_miseur = %(id_utilisateur)s ORDER BY date_limite DESC",
             {
                 "id_utilisateur": id_utilisateur
             }

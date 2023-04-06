@@ -77,27 +77,46 @@
         {% endif %}
     </div>
 {% endmacro %}
-
 {% macro afficher_mises_utilisateur(mise) %}
      <div class="card text-center card-enchere" style="width: 20rem;">
-        {% if enchere.est_active %}
+        {% if mise.est_active %}
             <div class="card-header">
-                <h5>{{ enchere.titre }}</h5>
-
+                <h5>{{ mise.titre }}</h5>
             </div>
         {% else %}
             <div class="card-header enchere-inactive">
-                <h5>{{ enchere.titre }}</h5>
+                <h5>{{ mise.titre }}</h5>
                 <p>Inactive</p>
             </div>
         {% endif %}
         <div class="card-body">
-            <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ enchere.titre }}">
-            <p class="card-text my-3">{{ enchere.description }}</p>
+            <img src="https://picsum.photos/seed/{{ mise.id_enchere }}/300/300" class="card-img mb-3" alt="Image pour l'enchère {{ mise.titre }}">
+            {% if mise.enchere_leader %}
+                {% if mise.est_active %}
+                    <p>Vous menez cette enchère avec une mise de {{ mise.montant }}$</p>
+                {% else %}
+                    <p>Vous avez gagner cette enchère avec une mise de {{ mise.montant }}$</p>
+                {% endif %}
+            {% else %}
+                {% if mise.est_active %}
+                    <p>Vous ne menez pas cette enchère</p>
+                    <p>La plus grande mise est de {{ mise.montant_max }}$</p>
+                {% else %}
+                    <p>Vous n'avez pas gagné cette enchère</p>
+                    <p>L'item s'est vendu pour {{ mise.montant_max }}$</p>
+                {% endif %}
+            {% endif %}
         </div>
-        <div class="card-footer">
-            <p>Date limite : {{ enchere.date_limite }}</p>
-            <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
-        </div>
+        {% if mise.est_active %}
+            <div class="card-footer">
+                <p>Date limite : {{ mise.date_limite }}</p>
+                <a href="/details/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% else %}
+            <div class="card-footer enchere-inactive">
+                <p>Date limite : {{ mise.date_limite }}</p>
+                <a href="/details/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% endif %}
     </div>
 {% endmacro %}

@@ -1,4 +1,21 @@
 {% extends "base.jinja" %}
+{% from "card-enchere.jinja" import afficher_mises_utilisateur%}
 {% block contenu %}
-
+    <section>
+        <h2 class="text-center mt-3">Voici vos mises</h2>
+        <div class="section-mises">
+            {% if mises %}
+                {% for m in mises %}
+                    {% if not m.est_supprimee %}
+                        {{ afficher_mises_utilisateur(m) }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="texte-vide">
+                    <h3>Vous n'avez pas encore misé sur une enchère</h3>
+                    <p>Vous pouvez visiter la <a href="/">page d'accueil</a> pour trouver des enchères qui vous intéresses</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}
