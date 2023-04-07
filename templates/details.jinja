@@ -36,8 +36,19 @@
                 <form action="/details/{{ enchere.id_enchere }}/miser" method="POST">
                     <input class="{{ classe_mise }}" type="text" placeholder="Somme de la mise" id="txt_mise" name="txt_mise">
                     <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
-                    <button class="btn btn-primary">Miser</button>
+                    <button type="submit" class="btn btn-primary">Miser</button>
                 </form>
+            {% endif %}
+            {% if session.utilisateur.est_admin %}
+                {% if enchere.est_supprimee %}
+                    <form method="post" action="/encheres/{{ enchere.id_enchere }}/supprimer">
+                        <button type="submit" class="btn btn-primary">Annuler la suppression</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="/encheres/{{ enchere.id_enchere }}/supprimer">
+                        <button type="submit" class="btn btn-primary">Supprimer l'enchère</button>
+                    </form>
+                {% endif %}
             {% endif %}
         </div>
     </section>

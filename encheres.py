@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, request, redirect, abort, session
 import hashlib
 import bd
 
-bp_details = Blueprint('details', __name__)
+bp_encheres = Blueprint('encheres', __name__)
 
-@bp_details.route("/<int:id>")
+@bp_encheres.route("/<int:id>")
 def details(id):
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id)
@@ -26,7 +26,7 @@ def details(id):
     return render_template("details.jinja", enchere=enchere, vendeur=vendeur)
 
 
-@bp_details.route("/<int:id>/miser", methods=["POST", "GET"])
+@bp_encheres.route("/<int:id>/miser", methods=["POST"])
 def miser(id):
     id_mise = id
     erreur = False
@@ -52,9 +52,25 @@ def miser(id):
         if erreur:
             return render_template("details.jinja", classe_mise=classe_mise, enchere=enchere, mise=mise_max, texte_erreur_mise=texte_erreur_mise)
         with bd.creer_connexion() as conn:
-            bd.ajouter_mise(conn,session["utilisateur"]["id_utilisateur"] ,id_mise ,mise_montant)
-    return redirect("/details/confirmation", code=303)
+            bd.ajouter_mise(conn,session["utilisateur"]["id_utilisateur"], id_mise, mise_montant)
+    return redirect(f"/encheres/{id_mise}", code=303)
 
-@bp_details.route("/confirmation")
-def confirmation():
-    return render_template("confirmation-mise.jinja")
+
+@bp_encheres.route("/<int:id>/supprimer", methods=["POST"])
+def supprimer_enchere(id):
+    if not session["utilisateur"]:
+        abort(401)
+    elif not session["utilisateur"]["est_admin"]:
+        abort(403)
+    with bd.creer_connexion() as conn:
+        enchere = bd.get_enchere(conn, id)
+    if not enchere:
+        abort(404)
+    if enchere["est_supprimee"]:
+        with bd.creer_connexion() as conn:
+            bd.activer_enchere(conn, id)
+            return redirect(f"/encheres/{id}", 303)
+    else:
+        with bd.creer_connexion() as conn:
+            bd.supprimer_enchere(conn, id)
+            return redirect(f"/encheres/{id}", 303)

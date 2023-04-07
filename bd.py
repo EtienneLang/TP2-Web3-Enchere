@@ -177,6 +177,30 @@ def get_mises_utilisateur(conn, id_utilisateur):
         return curseur.fetchall()
 
 
+def supprimer_enchere(conn, id_enchere):
+    """Permets de supprimer une enchère"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "UPDATE enchere SET est_supprimee = 1 WHERE id_enchere = %(id_enchere)s",
+            {
+                "id_enchere": id_enchere
+            }
+        )
+    return
+
+
+def activer_enchere(conn, id_enchere):
+    """Permets d'annuler la suppression d'une enchère"""
+    with conn.get_curseur() as curseur:
+        curseur.execute(
+            "UPDATE enchere SET est_supprimee = 0 WHERE id_enchere = %(id_enchere)s",
+            {
+                "id_enchere": id_enchere
+            }
+        )
+    return
+
+
 def verifier_si_enchere_active(enchere):
     """Permets de vérifier si une enchère est active"""
     if enchere['date_limite'] >= datetime.date.today():
