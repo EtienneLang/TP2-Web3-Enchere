@@ -73,7 +73,7 @@ def get_mise_max(conn, identifiant):
         return curseur.fetchone()
 
 
-def voir_si_deja_mise(conn, id_enchere, id_miseur):
+def voir_si_deja_mise(conn, id_miseur, id_enchere,):
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM mise WHERE fk_enchere = %(id_enchere)s and fk_miseur = %(id_miseur)s",
@@ -89,10 +89,10 @@ def voir_si_deja_mise(conn, id_enchere, id_miseur):
             return True
 
 
-def modifier_mise(conn, id_enchere, id_miseur, montant):
+def modifier_mise(conn, id_miseur, id_enchere, montant):
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "UPDATE mise SET montant=montant WHERE fk_enchere = %(id_enchere)s and fk_miseur = %(id_miseur)s",
+            "UPDATE mise SET montant= %(montant)s WHERE fk_enchere = %(id_enchere)s and fk_miseur = %(id_miseur)s",
             {
                 "id_enchere": id_enchere,
                 "id_miseur": id_miseur,

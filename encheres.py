@@ -52,7 +52,10 @@ def miser(id):
         if erreur:
             return render_template("details.jinja", classe_mise=classe_mise, enchere=enchere, mise=mise_max, texte_erreur_mise=texte_erreur_mise)
         with bd.creer_connexion() as conn:
-            bd.ajouter_mise(conn,session["utilisateur"]["id_utilisateur"], id_mise, mise_montant)
+            if bd.voir_si_deja_mise(conn, session["utilisateur"]["id_utilisateur"], id_mise):
+                bd.modifier_mise(conn, session["utilisateur"]["id_utilisateur"], id_mise, mise_montant)
+            else:
+                bd.ajouter_mise(conn,session["utilisateur"]["id_utilisateur"], id_mise, mise_montant)
     return redirect(f"/encheres/{id_mise}", code=303)
 
 
