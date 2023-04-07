@@ -40,14 +40,14 @@ def miser(id):
             classe_mise = "is-invalid"
             texte_erreur_mise = f"Aucune mise entré"
             erreur = True
-        elif not mise_max["max"] and mise_montant <= 0:
+        elif not mise_max is None and mise_montant <= 0:
             classe_mise = "is-invalid"
             texte_erreur_mise = f"La mise dois être plus haute que 0$"
             erreur = True
-        elif mise_max["max"] is not None:
-            if mise_montant <= mise_max["max"]:
+        elif mise_max is not None:
+            if mise_montant <= mise_max["montant"]:
                 classe_mise = "is-invalid"
-                texte_erreur_mise = f"La mise dois être plus haute que {mise_max['max']} $"
+                texte_erreur_mise = f"La mise dois être plus haute que {mise_max['montant']} $"
                 erreur = True
         if erreur:
             return render_template("details.jinja", classe_mise=classe_mise, enchere=enchere, mise=mise_max, texte_erreur_mise=texte_erreur_mise)

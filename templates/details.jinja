@@ -33,7 +33,7 @@
                 {% endif %}
             {% endif %}
             {% if session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
-                <form action="/details/{{ enchere.id_enchere }}/miser" method="POST">
+                <form action="/encheres/{{ enchere.id_enchere }}/miser" method="POST">
                     <input class="{{ classe_mise }}" type="text" placeholder="Somme de la mise" id="txt_mise" name="txt_mise">
                     <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
                     <button type="submit" class="btn btn-primary">Miser</button>
