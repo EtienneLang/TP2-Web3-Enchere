@@ -6,8 +6,18 @@
         <h1 class="my-3">Le royaume des enchères</h1>
         <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
     </div>
-
     <div class="section-accueil">
+        {% if session.utilisateur.est_admin %}
+            {% for e in encheres %}
+                {{ afficher_enchere(e) }}
+            {% endfor %}
+        {% else %}
+            {% for e in encheres %}
+                {% if not e.est_supprimee %}
+                    {{ afficher_enchere(e) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}  
         {% for e in encheres %}
             {{ afficher_enchere(e) }}
         {% endfor %}

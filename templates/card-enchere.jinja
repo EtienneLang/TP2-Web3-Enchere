@@ -1,9 +1,13 @@
 {% macro afficher_enchere(enchere) %}
     <div class="card text-center card-enchere" style="width: 20rem;">
-        {% if enchere.est_active %}
+        {% if enchere.est_supprimee %}
+            <div class="card-header enchere-inactive">
+                <h5>{{ enchere.titre }}</h5>
+                <p>Supprimée</p>
+            </div>
+        {% elif enchere.est_active %}
             <div class="card-header">
                 <h5>{{ enchere.titre }}</h5>
-
             </div>
         {% else %}
             <div class="card-header enchere-inactive">
@@ -15,10 +19,23 @@
             <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" class="card-img" alt="Image pour l'enchère {{ enchere.titre }}">
             <p class="card-text my-3">{{ enchere.description }}</p>
         </div>
-        <div class="card-footer">
-            <p>Date limite : {{ enchere.date_limite }}</p>
-            <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
-        </div>
+        {% if enchere.est_supprimee%}
+            <div class="card-footer enchere-inactive">
+                <p>Date limite : {{ enchere.date_limite }}</p>
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% elif enchere.est_active %}
+            <div class="card-footer">
+                <p>Date limite : {{ enchere.date_limite }}</p>
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% else %}
+            <div class="card-footer enchere-inactive">
+                <p>Date limite : {{ enchere.date_limite }}</p>
+                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+            </div>
+        {% endif %}
+
     </div>
 {% endmacro %}
 
@@ -65,12 +82,12 @@
             <p>Date limite : {{ enchere.date_limite }}</p>
         </div>
         {% elif enchere.est_active %}
-            <div class="card-footer enchere-inactive">
+            <div class="card-footer">
                 <p>Date limite : {{ enchere.date_limite }}</p>
                 <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
         {% else %}
-            <div class="card-footer">
+            <div class="card-footer enchere-inactive">
                 <p>Date limite : {{ enchere.date_limite }}</p>
                 <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
@@ -93,9 +110,11 @@
             <img src="https://picsum.photos/seed/{{ mise.id_enchere }}/300/300" class="card-img mb-3" alt="Image pour l'enchère {{ mise.titre }}">
             {% if mise.enchere_leader %}
                 {% if mise.est_active %}
-                    <p>Vous menez cette enchère avec une mise de {{ mise.montant }}$</p>
+                    <p>Vous menez cette enchère</p>
+                    <p>Votre mise est de {{ mise.montant }}$</p>
                 {% else %}
-                    <p>Vous avez gagner cette enchère avec une mise de {{ mise.montant }}$</p>
+                    <p>Vous avez gagner cette enchère</p>
+                    <p>Votre mise était de {{ mise.montant }}$</p>
                 {% endif %}
             {% else %}
                 {% if mise.est_active %}

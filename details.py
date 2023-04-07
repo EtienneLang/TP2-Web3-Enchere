@@ -8,13 +8,22 @@ bp_details = Blueprint('details', __name__)
 def details(id):
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id)
+        if not enchere:
+            abort(404)
         mise = bd.get_mise_max(conn, id)
-        if not mise:
-            mise["max"] = "Aucune"
-
         vendeur = bd.get_utilisateur(conn, enchere["fk_vendeur"])
+    # Accès à une enchère supprimée sans être un admin
+    if enchere["est_supprimee"] and not session["utilisateur"]["est_admin"]:
+        abort(404)
+    if not mise:
+        enchere["mise_max"] = 0
+    else:
+        enchere["mise_max"] = mise["montant"]
+        with bd.creer_connexion() as conn:
+            miseur = bd.get_utilisateur(conn, mise["fk_miseur"])
+            enchere["miseur"] = miseur["nom"]
 
-    return render_template("details.jinja", enchere=enchere, mise=mise, vendeur=vendeur)
+    return render_template("details.jinja", enchere=enchere, vendeur=vendeur)
 
 
 @bp_details.route("/<int:id>/miser", methods=["POST", "GET"])

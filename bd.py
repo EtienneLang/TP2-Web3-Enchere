@@ -65,16 +65,12 @@ def get_utilisateur(conn, identifiant):
 def get_mise_max(conn, identifiant):
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT m.* FROM mise m LEFT OUTER JOIN mise m2 "
-            "ON m.fk_enchere = m2.fk_enchere AND m.montant < m2.montant"
-            " WHERE m2.fk_enchere IS NULL AND m.fk_enchere = %(id_enchere)s",
+            "SELECT * FROM mise WHERE fk_enchere = %(id_enchere)s ORDER BY montant DESC LIMIT 1",
             {
                 "id_enchere": identifiant
             }
         )
-        mise_max = curseur.fetchone()
-        donnees_inutiles = curseur.fetchall()
-        return mise_max
+        return curseur.fetchone()
 
 
 def ajouter_mise(conn, miseur, enchere, montant):
@@ -88,6 +84,8 @@ def ajouter_mise(conn, miseur, enchere, montant):
                 "montant": montant
             }
         )
+
+
 def get_encheres(conn):
     """Retourne toutes les enchères dans la bd"""
     with conn.get_curseur() as curseur:
