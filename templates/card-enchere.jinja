@@ -84,12 +84,12 @@
         {% elif enchere.est_active %}
             <div class="card-footer">
                 <p>Date limite : {{ enchere.date_limite }}</p>
-                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+                <a href="/encheres/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
         {% else %}
             <div class="card-footer enchere-inactive">
                 <p>Date limite : {{ enchere.date_limite }}</p>
-                <a href="/details/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
+                <a href="/encheres/{{ enchere.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
         {% endif %}
     </div>
@@ -129,12 +129,12 @@
         {% if mise.est_active %}
             <div class="card-footer">
                 <p>Date limite : {{ mise.date_limite }}</p>
-                <a href="/details/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
+                <a href="/encheres/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
         {% else %}
             <div class="card-footer enchere-inactive">
                 <p>Date limite : {{ mise.date_limite }}</p>
-                <a href="/details/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
+                <a href="/encheres/{{ mise.id_enchere }}" class="card-link">Voir cette enchère</a>
             </div>
         {% endif %}
     </div>

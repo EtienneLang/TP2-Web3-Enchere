@@ -33,20 +33,31 @@
                 {% endif %}
             {% endif %}
             {% if session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
-                <form action="/details/{{ enchere.id_enchere }}/miser" method="POST">
-                    <input class="{{ classe_mise }}" type="text" placeholder="Somme de la mise" id="txt_mise" name="txt_mise">
-                    <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
-                    <button type="submit" class="btn btn-primary">Miser</button>
+                <form action="/encheres/{{ enchere.id_enchere }}/miser" method="POST" novalidate>
+                    <div class="d-flex">
+                        <div class="mt-1">
+                            {% if enchere.mise_max %}
+                                <input class="{{ classe_mise }}" type="number" min="{{ enchere.mise_max }}" name="txt_mise" id="txt_mise" placeholder="Entrez votre mise">
+                                <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
+                            {% else %}
+                                <input class="{{ classe_mise }}" type="number" min="0" name="txt_mise" id="txt_mise" placeholder="Entrez votre mise">
+                                <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary mx-3">Miser</button>
+                    </div>
                 </form>
+            {% elif enchere.est_active and not session.utilisateur %}
+                <p>Pour miser, veuillez <a href="/compte/authentifier">vous connecter</a></p>
             {% endif %}
             {% if session.utilisateur.est_admin %}
                 {% if enchere.est_supprimee %}
                     <form method="post" action="/encheres/{{ enchere.id_enchere }}/supprimer">
-                        <button type="submit" class="btn btn-primary">Annuler la suppression</button>
+                        <button type="submit" class="btn btn-primary my-3">Annuler la suppression</button>
                     </form>
                 {% else %}
                     <form method="post" action="/encheres/{{ enchere.id_enchere }}/supprimer">
-                        <button type="submit" class="btn btn-primary">Supprimer l'enchère</button>
+                        <button type="submit" class="btn btn-primary my-3">Supprimer l'enchère</button>
                     </form>
                 {% endif %}
             {% endif %}

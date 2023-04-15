@@ -7,21 +7,28 @@
         <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
     </div>
     <div class="section-accueil">
-        {% if session.utilisateur.est_admin %}
+        {% if encheres %}
+            {% if session.utilisateur.est_admin %}
+                {% for e in encheres %}
+                    {{ afficher_enchere(e) }}
+                {% endfor %}
+            {% else %}
+                {% for e in encheres %}
+                    {% if not e.est_supprimee %}
+                        {{ afficher_enchere(e) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             {% for e in encheres %}
                 {{ afficher_enchere(e) }}
             {% endfor %}
         {% else %}
-            {% for e in encheres %}
-                {% if not e.est_supprimee %}
-                    {{ afficher_enchere(e) }}
-                {% endif %}
-            {% endfor %}
-        {% endif %}  
-        {% for e in encheres %}
-            {{ afficher_enchere(e) }}
-        {% endfor %}
+            <div class="texte-vide">
+                <h3>Il n'a aucune enchères présentement</h3>
+            </div>
+        {% endif %}
     </div>
+
 
 </section>
 {% endblock %}
