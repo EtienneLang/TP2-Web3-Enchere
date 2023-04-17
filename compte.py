@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, abort, session
+from flask import Blueprint, render_template, request, redirect, session
 import hashlib
 import bd
 import re
@@ -49,9 +49,9 @@ def creer_compte():
                                )
     utilisateur = invalidation
     with bd.creer_connexion() as conn:
-        id = bd.creer_compte(conn, utilisateur)
+        id_utilisateur = bd.creer_compte(conn, utilisateur)
         # pour avoir le champ est_admin
-        utilisateur = bd.get_utilisateur(conn, id)
+        utilisateur = bd.get_utilisateur(conn, id_utilisateur)
     session["utilisateur"] = utilisateur
     return redirect("/", code=303)
 
@@ -209,4 +209,3 @@ def valider_creation_compte():
         "mdp": mdp
     }
     return utilisateur
-

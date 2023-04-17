@@ -2,7 +2,7 @@
 Démonstration des paramètres obligatoires
 """
 
-from flask import Flask, redirect, render_template, request, abort, session
+from flask import Flask, render_template
 import bd
 
 from compte import bp_compte
@@ -20,4 +20,3 @@ def index():
     with bd.creer_connexion() as conn:
         encheres = bd.get_encheres(conn)
     return render_template('index.jinja', encheres=encheres)
-

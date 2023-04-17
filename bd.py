@@ -5,7 +5,6 @@ import datetime
 import types
 import contextlib
 import mysql.connector
-import hashlib
 
 
 @contextlib.contextmanager
@@ -167,7 +166,8 @@ def creer_compte(conn, utilisateur):
     """Permets d'ajouter un compte à la bd"""
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "INSERT INTO utilisateur (id_utilisateur, courriel, nom, mdp) VALUES (NULL, %(courriel)s, %(nom)s, %(mdp)s)",
+            "INSERT INTO utilisateur (id_utilisateur, courriel, nom, mdp)"
+            " VALUES (NULL, %(courriel)s, %(nom)s, %(mdp)s)",
             {
                 "courriel": utilisateur["courriel"],
                 "nom": utilisateur["nom"],
@@ -232,5 +232,3 @@ def verifier_si_enchere_active(enchere):
     else:
         enchere['est_active'] = False
     return enchere
-
-
