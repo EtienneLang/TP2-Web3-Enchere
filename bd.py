@@ -82,11 +82,7 @@ def voir_si_deja_mise(conn, id_miseur, id_enchere,):
                 "id_miseur": id_miseur
             }
         )
-        mise = curseur.fetchone()
-        if mise is None:
-            return False
-        if mise:
-            return True
+        return curseur.fetchone()
 
 
 def modifier_mise(conn, id_miseur, id_enchere, montant):

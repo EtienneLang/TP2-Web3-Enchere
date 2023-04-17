@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, abort, session
-import hashlib
 import bd
 
 bp_encheres = Blueprint('encheres', __name__)
@@ -63,7 +62,10 @@ def miser(id):
                                mise=mise_max,
                                texte_erreur_mise=texte_erreur_mise)
     with bd.creer_connexion() as conn:
-        bd.ajouter_mise(conn, session["utilisateur"]["id_utilisateur"], id, mise_montant)
+        if bd.voir_si_deja_mise(conn, session["utilisateur"]["id_utilisateur"], id):
+            bd.modifier_mise(conn, session["utilisateur"]["id_utilisateur"], id, mise_montant)
+        else:
+            bd.ajouter_mise(conn, session["utilisateur"]["id_utilisateur"], id, mise_montant)
     return redirect(f"/encheres/{id}", code=303)
 
 
