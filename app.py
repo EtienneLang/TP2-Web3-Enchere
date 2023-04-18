@@ -1,5 +1,6 @@
 """
-Démonstration des paramètres obligatoires
+TP2 - ENCHÈRES
+Route de base
 """
 
 from flask import Flask, render_template

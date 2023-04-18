@@ -1,5 +1,5 @@
 """
-Connexion à la BD
+Toutes les requètes à la bd
 """
 import datetime
 import types
@@ -62,6 +62,7 @@ def get_utilisateur(conn, identifiant):
 
 
 def get_mise_max(conn, identifiant):
+    """Permets d'avoir la mise max d'une enchère"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM mise WHERE fk_enchere = %(id_enchere)s ORDER BY montant DESC LIMIT 1",
@@ -73,6 +74,7 @@ def get_mise_max(conn, identifiant):
 
 
 def voir_si_deja_mise(conn, id_miseur, id_enchere,):
+    """Permets de vérifier si un utilisateur a déjà misé sur une enchère"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM mise WHERE fk_enchere = %(id_enchere)s and fk_miseur = %(id_miseur)s",
@@ -85,6 +87,7 @@ def voir_si_deja_mise(conn, id_miseur, id_enchere,):
 
 
 def modifier_mise(conn, id_miseur, id_enchere, montant):
+    """Permets de modifier la mise d'un utilisateur sur une enchère"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "UPDATE mise SET montant= %(montant)s WHERE fk_enchere = %(id_enchere)s and fk_miseur = %(id_miseur)s",
@@ -151,6 +154,7 @@ def get_encheres_utilisateur(conn, id_utilisateur):
 
 
 def authentifier(conn, courriel, mdp):
+    """Permets d'avoir un utilisateur dans la bd"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM utilisateur WHERE courriel=%(courriel)s AND mdp=%(mdp)s",
@@ -178,6 +182,7 @@ def creer_compte(conn, utilisateur):
 
 
 def verifier_courriel(conn, courriel):
+    """Permets de vérifier si un courriel est déjà utilisé dans la bd"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM utilisateur WHERE courriel=%(courriel)s",

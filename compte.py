@@ -1,3 +1,7 @@
+"""
+Toutes les routes pour les comptes utilisateur
+"""
+
 from flask import Blueprint, render_template, request, redirect, session
 import hashlib
 import bd
@@ -83,6 +87,7 @@ def afficher_encheres_utilisateur():
 
 @bp_compte.route("/mises")
 def afficher_mises_utilisateur():
+    """Route qui permet d'afficher les mises d'un utilisateur"""
     if not session["utilisateur"]:
         return redirect("/compte/authentifier")
     with bd.creer_connexion() as conn:

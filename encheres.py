@@ -1,3 +1,7 @@
+"""
+Toutes les routes pour les détails d'une enchère et de la modification des enchères
+"""
+
 from flask import Blueprint, render_template, request, redirect, abort, session
 import bd
 
@@ -6,6 +10,7 @@ bp_encheres = Blueprint('encheres', __name__)
 
 @bp_encheres.route("/<int:id_enchere>")
 def details(id_enchere):
+    """Permets d'afficher les détails d'une enchère"""
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id_enchere)
         if not enchere:
@@ -28,6 +33,7 @@ def details(id_enchere):
 
 @bp_encheres.route("/<int:id_enchere>/miser", methods=["POST"])
 def miser(id_enchere):
+    """Permets à un utilisateur de miser sur une enchère"""
     if not session["utilisateur"]:
         # Si l'utilisateur n'est pas connecté, on le redirige à l'autentification
         return redirect("/compte/authentifier")
@@ -71,6 +77,7 @@ def miser(id_enchere):
 
 @bp_encheres.route("/<int:id_enchere>/supprimer", methods=["POST"])
 def supprimer_enchere(id_enchere):
+    """Permets à un administrateur de supprimer une enchère ou d'annuler sa suppression"""
     if not session["utilisateur"]:
         abort(401)
     elif not session["utilisateur"]["est_admin"]:
