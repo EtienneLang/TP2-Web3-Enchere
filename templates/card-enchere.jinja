@@ -35,7 +35,6 @@
                 <a href="/encheres/{{ enchere.id_enchere }}" class="card-link stretched-link">Voir cette enchère</a>
             </div>
         {% endif %}
-
     </div>
 {% endmacro %}
 
@@ -94,6 +93,7 @@
         {% endif %}
     </div>
 {% endmacro %}
+
 {% macro afficher_mises_utilisateur(mise) %}
      <div class="card text-center card-enchere" style="width: 20rem;">
         {% if mise.est_active %}

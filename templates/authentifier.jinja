@@ -6,12 +6,12 @@
             <div class="row">
                 <div class="col">
                     <div class="style-input">
-                        <label for="txtnom">Adresse courriel</label>
+                        <label for="courriel">Adresse courriel</label>
                         <input type="email" name="courriel" id="courriel" value="{{ courriel }}" class="{{ classe_courriel}} form-control"/>
                     </div>
                     <div class="style-input">
                         <label for="mdp">Mot de passe</label>
-                        <input type="password" name="mdp"id="mdp" class="{{ classe_mdp }} form-control"/>
+                        <input type="password" name="mdp" id="mdp" class="{{ classe_mdp }} form-control"/>
                     </div>
                     <div class="invalid-feedback">
                         <p>{{ texte_invalide }}</p>
@@ -21,11 +21,6 @@
             <div class="d-flex justify-content-center">
                 <input type="submit" class="button btn-primary mb-3" value="Se connecter">
             </div>
-
         </form>
-
     </section>
-
-
-
 {% endblock %}

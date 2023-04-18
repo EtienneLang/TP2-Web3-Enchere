@@ -1,34 +1,32 @@
 {% extends "base.jinja" %}
 {% from 'card-enchere.jinja' import afficher_enchere %}
 {% block contenu %}
-<section>
-    <div class="text-center">
-        <h1 class="my-3">Le royaume des enchères</h1>
-        <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
-    </div>
-    <div class="section-accueil">
-        {% if encheres %}
-            {% if session.utilisateur.est_admin %}
+    <section>
+        <div class="text-center">
+            <h1 class="my-3">Le royaume des enchères</h1>
+            <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
+        </div>
+        <div class="section-accueil">
+            {% if encheres %}
+                {% if session.utilisateur.est_admin %}
+                    {% for e in encheres %}
+                        {{ afficher_enchere(e) }}
+                    {% endfor %}
+                {% else %}
+                    {% for e in encheres %}
+                        {% if not e.est_supprimee %}
+                            {{ afficher_enchere(e) }}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 {% for e in encheres %}
                     {{ afficher_enchere(e) }}
                 {% endfor %}
             {% else %}
-                {% for e in encheres %}
-                    {% if not e.est_supprimee %}
-                        {{ afficher_enchere(e) }}
-                    {% endif %}
-                {% endfor %}
+                <div class="texte-vide">
+                    <h3>Il n'a aucune enchères présentement</h3>
+                </div>
             {% endif %}
-            {% for e in encheres %}
-                {{ afficher_enchere(e) }}
-            {% endfor %}
-        {% else %}
-            <div class="texte-vide">
-                <h3>Il n'a aucune enchères présentement</h3>
-            </div>
-        {% endif %}
-    </div>
-
-
-</section>
+        </div>
+    </section>
 {% endblock %}
