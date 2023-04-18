@@ -4,7 +4,7 @@ import bd
 bp_encheres = Blueprint('encheres', __name__)
 
 
-@bp_encheres.route("/<int:id>")
+@bp_encheres.route("/<int:id_enchere>")
 def details(id_enchere):
     with bd.creer_connexion() as conn:
         enchere = bd.get_enchere(conn, id_enchere)
@@ -26,7 +26,7 @@ def details(id_enchere):
     return render_template("details.jinja", enchere=enchere, vendeur=vendeur)
 
 
-@bp_encheres.route("/<int:id>/miser", methods=["POST"])
+@bp_encheres.route("/<int:id_enchere>/miser", methods=["POST"])
 def miser(id_enchere):
     if not session["utilisateur"]:
         # Si l'utilisateur n'est pas connecté, on le redirige à l'autentification
@@ -69,7 +69,7 @@ def miser(id_enchere):
     return redirect(f"/encheres/{id_enchere}", code=303)
 
 
-@bp_encheres.route("/<int:id>/supprimer", methods=["POST"])
+@bp_encheres.route("/<int:id_enchere>/supprimer", methods=["POST"])
 def supprimer_enchere(id_enchere):
     if not session["utilisateur"]:
         abort(401)
