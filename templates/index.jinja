@@ -8,7 +8,7 @@
         </div>
         <div class="section-accueil">
             {% if encheres %}
-                {% if session.utilisateur.est_admin %}
+                {% if session and session.utilisateur.est_admin %}
                     {% for e in encheres %}
                         {{ afficher_enchere(e) }}
                     {% endfor %}

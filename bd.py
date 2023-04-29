@@ -5,16 +5,18 @@ import datetime
 import types
 import contextlib
 import mysql.connector
+import os
+import dotenv
 
 
 @contextlib.contextmanager
 def creer_connexion():
     """Pour créer une connexion à la BD"""
     conn = mysql.connector.connect(
-        user="garneau",
-        password="qwerty123",
-        host="127.0.0.1",
-        database="tp2_enchere",
+        user=os.getenv("BD_UTILISATEUR"),
+        password=os.getenv("BD_MDP"),
+        host=os.getenv("BD_SERVEUR"),
+        database=os.getenv("BD_NOM_SCHEMA"),
         raise_on_warnings=True
     )
 

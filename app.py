@@ -5,9 +5,11 @@ Route de base
 
 from flask import Flask, render_template
 import bd
-
+import dotenv, os
 from compte import bp_compte
 from encheres import bp_encheres
+if not os.getenv("BD_UTILISATEUR"):
+    dotenv.load_dotenv('.env')
 app = Flask(__name__)
 
 app.register_blueprint(bp_compte, url_prefix="/compte")

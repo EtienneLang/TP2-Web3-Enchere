@@ -34,7 +34,7 @@ def details(id_enchere):
 @bp_encheres.route("/<int:id_enchere>/miser", methods=["POST"])
 def miser(id_enchere):
     """Permets à un utilisateur de miser sur une enchère"""
-    if not session["utilisateur"]:
+    if not session or not session["utilisateur"]:
         # Si l'utilisateur n'est pas connecté, on le redirige à l'autentification
         return redirect("/compte/authentifier")
     with bd.creer_connexion() as conn:

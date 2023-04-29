@@ -88,7 +88,7 @@ def afficher_encheres_utilisateur():
 @bp_compte.route("/mises")
 def afficher_mises_utilisateur():
     """Route qui permet d'afficher les mises d'un utilisateur"""
-    if not session["utilisateur"]:
+    if not session or not session["utilisateur"]:
         return redirect("/compte/authentifier")
     with bd.creer_connexion() as conn:
         mises = bd.get_mises_utilisateur(conn, session["utilisateur"]["id_utilisateur"])
