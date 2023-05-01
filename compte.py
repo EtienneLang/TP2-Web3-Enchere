@@ -2,7 +2,7 @@
 Toutes les routes pour les comptes utilisateur
 """
 
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, current_app as app
 import hashlib
 import bd
 import re
