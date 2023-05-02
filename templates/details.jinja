@@ -1,8 +1,10 @@
 {% extends "base.jinja" %}
 {% block contenu %}
-    <section class="section-details">
-        <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" alt="Image pour l'enchère {{ enchere.titre }}">
-        <div class="p-4">
+    <section class="section-details row">
+        <div class="col-md">
+            <img src="https://picsum.photos/seed/{{ enchere.id_enchere }}/300/300" alt="Image pour l'enchère {{ enchere.titre }}">
+        </div>
+        <div class="p-4 col">
             <h2>{{ enchere.titre }}</h2>
             <p>{{ enchere.description }}</p>
             <p>Date limite : {{ enchere.date_limite }}</p>

@@ -6,6 +6,7 @@ import types
 import contextlib
 import mysql.connector
 import os
+from flask import current_app as app
 import dotenv
 
 
