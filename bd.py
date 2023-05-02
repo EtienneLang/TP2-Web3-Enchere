@@ -52,7 +52,7 @@ def get_utilisateurs(conn):
 
 
 def get_utilisateur(conn, identifiant):
-    """Retourne un jeu vidéo"""
+    """Retourne un utilisateur"""
     with conn.get_curseur() as curseur:
         curseur.execute(
             "SELECT * FROM utilisateur WHERE id_utilisateur=%(id_utilisateur)s",

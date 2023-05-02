@@ -1,8 +1,9 @@
 """
 Toutes les routes pour les comptes utilisateur
 """
+import datetime
 
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, current_app as app
 import hashlib
 import bd
 import re
@@ -16,6 +17,7 @@ reg_html = re.compile(r'<(.*)>.*?|<(.*) />')
 def authentifier():
     """Permets d'autentifier un utilisateur"""
     if request.method == "POST":
+        app.logger.info(f"{datetime.datetime} - L'utilisateur éssaie de se connecter")
         courriel = request.form.get("courriel", default="")
         if len(courriel) == 0:
             return render_template("authentifier.jinja", classe_courriel="is-invalid",
@@ -28,13 +30,17 @@ def authentifier():
         with bd.creer_connexion() as conn:
             utilisateur = bd.authentifier(conn, courriel, mdp)
             if not utilisateur:
+                app.logger.info(f"{datetime.datetime} - L'utilisateur n'a pas réussi à se connecter")
                 return render_template("authentifier.jinja", courriel=courriel, classe_mdp="is-invalid",
                                        texte_invalide="Le mot de passe ou l'adresse courriel est invalide")
             else:
                 session.permanent = True
                 session["utilisateur"] = utilisateur
+                app.logger.info(f"{datetime.datetime} - L'utilisateur s'est connecté en tant que"
+                                f" {session['utilisateur']['nom']}")
                 return redirect("/", code=303)
     else:
+        app.logger.info(f"{datetime.datetime} - L'utilisateur va sur la page pour s'authentifier")
         return render_template("authentifier.jinja")
 
 
@@ -42,12 +48,14 @@ def authentifier():
 def creer_compte():
     """Permets de créer un compte"""
     if request.method == "GET":
+        app.logger.info(f"{datetime.datetime} - L'utilisateur va à la page pour créer un compte ")
         return render_template("creer.jinja",
                                invalidation=None
                                )
 
     invalidation = valider_creation_compte()
     if not invalidation["form_valide"]:
+        app.logger.info(f"{datetime.datetime} - L'utilisateur n'a pas créer un compte, le formulaire est invalide")
         return render_template("creer.jinja",
                                invalidation=invalidation
                                )
@@ -57,12 +65,15 @@ def creer_compte():
         # pour avoir le champ est_admin
         utilisateur = bd.get_utilisateur(conn, id_utilisateur)
     session["utilisateur"] = utilisateur
+    app.logger.info(f"{datetime.datetime} - L'utilisateur a créer un compte et est connecté en tant que "
+                    f"{session['utilisateur']['nom']}")
     return redirect("/", code=303)
 
 
 @bp_compte.route("/deconnecter")
 def deconnecter():
     """Permets de déconnecter un utilisateur"""
+    app.logger.info(f"{datetime.datetime} - L'utilisateur {session['utilisateur']['nom']} se déconnecte ")
     session["utilisateur"].clear()
     return redirect("/")
 
@@ -71,7 +82,10 @@ def deconnecter():
 def afficher_encheres_utilisateur():
     """Permets d'afficher la page des enchères d'un utilisateur"""
     if not session or not session["utilisateur"]:
+        app.logger.warning(f"{datetime.datetime}"
+                           f" - L'utilisateur éssaie d'aller sur ses enchères alors qu'il n'est pas connecté ")
         return redirect("/compte/authentifier")
+    app.logger.info(f"{datetime.datetime} - L'utilisateur va sur la pages de ses enchères ")
     with bd.creer_connexion() as conn:
         encheres = bd.get_encheres_utilisateur(conn, session['utilisateur']['id_utilisateur'])
         for e in encheres:
@@ -88,7 +102,11 @@ def afficher_encheres_utilisateur():
 @bp_compte.route("/mises")
 def afficher_mises_utilisateur():
     """Route qui permet d'afficher les mises d'un utilisateur"""
+    app.logger.info(f"{datetime.datetime}"
+                       f" - L'utilisateur va sur la page pour voir ses mises ")
     if not session or not session["utilisateur"]:
+        app.logger.warning(f"{datetime.datetime}"
+                           f" - L'utilisateur éssaie d'aller sur ses mises alors qu'il n'est pas connecté ")
         return redirect("/compte/authentifier")
     with bd.creer_connexion() as conn:
         mises = bd.get_mises_utilisateur(conn, session["utilisateur"]["id_utilisateur"])
