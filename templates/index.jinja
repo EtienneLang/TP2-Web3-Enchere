@@ -1,4 +1,8 @@
 {% extends "base.jinja" %}
+{% block scripts %}
+<script src="/static/js/accueil.js" defer></script>
+<script src="/static/js/utils-ajax.js" defer></script>
+{% endblock %}
 {% from 'card-enchere.jinja' import afficher_enchere %}
 {% block contenu %}
     <section>
@@ -19,9 +23,6 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                {% for e in encheres %}
-                    {{ afficher_enchere(e) }}
-                {% endfor %}
             {% else %}
                 <div class="texte-vide">
                     <h3>Il n'a aucune enchères présentement</h3>

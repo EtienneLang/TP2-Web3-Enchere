@@ -76,7 +76,7 @@ def get_mise_max(conn, identifiant):
         return curseur.fetchone()
 
 
-def voir_si_deja_mise(conn, id_miseur, id_enchere,):
+def voir_si_deja_mise(conn, id_miseur, id_enchere):
     """Permets de vérifier si un utilisateur a déjà misé sur une enchère"""
     with conn.get_curseur() as curseur:
         curseur.execute(
@@ -115,11 +115,14 @@ def ajouter_mise(conn, miseur, enchere, montant):
         )
 
 
-def get_encheres(conn):
+def get_encheres(conn, indice):
     """Retourne toutes les enchères dans la bd"""
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT * FROM `enchere` ORDER BY date_limite DESC"
+            "SELECT * FROM `enchere` ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s",
+            {
+                "indice": indice
+            }
         )
         encheres = curseur.fetchall()
         for e in encheres:
