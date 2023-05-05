@@ -10,7 +10,6 @@
  * */
 const sectEncheres = document.getElementById("section-accueil")
 const piedDePage = document.getElementById("sect-footer")
-const listeEncheres = document.getElementById("section-encheres")
 const nbEncheresDemandees = 15
 
 /**
@@ -22,11 +21,54 @@ let motCle
 
 
 function afficherEncheres(enchere) {
-    let li = document.createElement("li")
-    let p = document.createElement("p")
-    p.append(indice + enchere.titre)
-    li.append(p)
-    listeEncheres.append(li)
+    const card = document.createElement("div")
+    card.classList.add("card")
+    card.classList.add("card-enchere")
+    const cardHeader = document.createElement("div")
+    cardHeader.classList.add("card-header")
+    const titre = document.createElement("h5")
+    titre.append(enchere.titre)
+    cardHeader.append(titre)
+    if (enchere.est_supprimee === 1)
+    {
+        const texteSupprimee = document.createElement("p")
+        texteSupprimee.append("Supprimée")
+        cardHeader.append(texteSupprimee)
+        cardHeader.classList.add("enchere-inactive")
+    }
+    else if (!enchere.est_active)
+    {
+        const texteInactive = document.createElement("p")
+        texteInactive.append("Inactive")
+        cardHeader.append(texteInactive)
+        cardHeader.classList.add("enchere-inactive")
+    }
+    const cardBody = document.createElement("div")
+    cardBody.classList.add("card-body")
+    const imgEnchere = document.createElement("img")
+    imgEnchere.src = "https://picsum.photos/seed/"+ enchere.id_enchere+ "/300/300"
+    imgEnchere.classList.add("card-img")
+    imgEnchere.alt = "Image pour l'enchere" + enchere.titre
+    const description = document.createElement("p")
+    description.append(enchere.description)
+    cardBody.append(imgEnchere)
+    cardBody.append(description)
+    const cardFooter = document.createElement("div")
+    cardFooter.classList.add("card-footer")
+    if (enchere.est_supprimee === 1 || !enchere.est_active)
+    {
+        cardFooter.classList.add("enchere-inactive")
+    }
+    const dateLimite = document.createElement("p")
+    dateLimite.append("Date limite : " + enchere.date_limite)
+    const lienEnchere = document.createElement("a")
+    lienEnchere.href = "/encheres/" + enchere.id_enchere
+    lienEnchere.classList.add("card-link")
+    lienEnchere.classList.add("stretched-link")
+    lienEnchere.append("Voir cette enchère")
+    cardFooter.append(dateLimite, lienEnchere)
+    card.append(cardHeader,cardBody,cardFooter)
+    sectEncheres.append(card)
 }
 
 

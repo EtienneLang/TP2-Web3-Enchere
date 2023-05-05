@@ -115,15 +115,23 @@ def ajouter_mise(conn, miseur, enchere, montant):
         )
 
 
-def get_encheres(conn, indice):
+def get_encheres(conn, indice, est_admin):
     """Retourne toutes les enchères dans la bd"""
     with conn.get_curseur() as curseur:
-        curseur.execute(
-            "SELECT * FROM `enchere` ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s",
-            {
-                "indice": indice
-            }
-        )
+        if est_admin:
+            curseur.execute(
+                "SELECT * FROM `enchere` ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s",
+                {
+                    "indice": indice
+                }
+            )
+        else:
+            curseur.execute(
+                "SELECT * FROM `enchere` WHERE est_supprimee = 0 ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s",
+                {
+                    "indice": indice
+                }
+            )
         encheres = curseur.fetchall()
         for e in encheres:
             verifier_si_enchere_active(e)

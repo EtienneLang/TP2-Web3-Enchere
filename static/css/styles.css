@@ -47,6 +47,10 @@ header nav a {
   margin: 2rem auto 2rem auto;
 }
 
+.card-enchere {
+  width: 20rem;
+  text-align: center;
+}
 .card-enchere .enchere-inactive {
   background-color: lightgray;
 }
