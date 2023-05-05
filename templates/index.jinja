@@ -11,23 +11,9 @@
             <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
         </div>
         <div class="section-accueil">
-            {% if encheres %}
-                {% if session and session.utilisateur.est_admin %}
-                    {% for e in encheres %}
-                        {{ afficher_enchere(e) }}
-                    {% endfor %}
-                {% else %}
-                    {% for e in encheres %}
-                        {% if not e.est_supprimee %}
-                            {{ afficher_enchere(e) }}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% else %}
-                <div class="texte-vide">
-                    <h3>Il n'a aucune enchères présentement</h3>
-                </div>
-            {% endif %}
+            <ul id="section-encheres">
+
+            </ul>
         </div>
     </section>
 {% endblock %}
