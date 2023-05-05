@@ -11,6 +11,7 @@
 const sectEncheres = document.getElementById("section-accueil")
 const piedDePage = document.getElementById("sect-footer")
 const listeEncheres = document.getElementById("section-encheres")
+const nbEncheresDemandees = 15
 
 /**
  * Variables globales
@@ -20,32 +21,30 @@ let indice = 0
 let motCle
 
 
-function afficherEncheres(enchere)
-{
+function afficherEncheres(enchere) {
     let li = document.createElement("li")
     let p = document.createElement("p")
-    p.append(enchere.titre)
+    p.append(indice + enchere.titre)
     li.append(p)
     listeEncheres.append(li)
 }
 
 
-async function ChercherEncheres()
-{
+async function ChercherEncheres() {
     let motCle = ""
     if (controleur != null) {
         // Annuler la requête précédente, car on lancera une nouvelle requête
         // à chaque input et on ne veut plus le résultat de la requête précédente.
-        controleur.abort();
+        return;
     }
 
-        const parametres = {
+    const parametres = {
         "mots-cles": motCle,
-        "indice": indice
+        "indice": indice.toString()
     }
 
     controleur = new AbortController()
-        try {
+    try {
         const encheres = await envoyerRequeteAjax(
             "/api/recherche",
             "GET",
@@ -71,26 +70,33 @@ async function ChercherEncheres()
     }
 }
 
-
-async function defilement()
+/**
+ * Permets de vérifier si le bas de la page est visible
+ * @returns {boolean} True si le bas de la page est visible, False sinon
+ */
+function VerifierBasPageVisible()
 {
-  while ((innerHeight + scrollY) >= 0.9 * document.body.offsetHeight)
-  {
-      await ChercherEncheres()
-  }
+    return (innerHeight + scrollY) >= 0.9 * document.body.offsetHeight
 }
 
+
+async function defilement() {
+    if (VerifierBasPageVisible()) {
+        await ChercherEncheres()
+    }
+}
 
 
 /**
  * Initialisation de la page
  */
-async function initialisation()
-{
+async function initialisation() {
 
     window.addEventListener('scroll', defilement)
     piedDePage.className = "d-none"
-    await defilement()
+    while (VerifierBasPageVisible()) {
+        await defilement()
+    }
 
 }
 

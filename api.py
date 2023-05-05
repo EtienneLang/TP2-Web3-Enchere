@@ -1,7 +1,6 @@
 """
 Blueprint pour le Ajax
 """
-
 from flask import Blueprint, render_template, request, redirect, session, current_app as app, jsonify
 import bd
 
