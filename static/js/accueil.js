@@ -8,6 +8,8 @@
 /**
  * Constantes globales
  * */
+const barRecherche = document.getElementById("recherche")
+const chargement = document.getElementById("chargement");
 const sectEncheres = document.getElementById("section-accueil")
 const piedDePage = document.getElementById("sect-footer")
 const nbEncheresDemandees = 15
@@ -73,7 +75,17 @@ function afficherEncheres(enchere) {
 
 
 async function ChercherEncheres() {
-    let motCle = ""
+    let motCle
+    if (barRecherche.value.length >= 3 )
+    {
+        sectEncheres.innerHTML = ""
+        indice = 0
+        motCle = barRecherche.value
+    }
+    else
+    {
+        motCle = ""
+    }
     if (controleur != null) {
         // Annuler la requête précédente, car on lancera une nouvelle requête
         // à chaque input et on ne veut plus le résultat de la requête précédente.
@@ -81,7 +93,7 @@ async function ChercherEncheres() {
     }
 
     const parametres = {
-        "mots-cles": motCle,
+        "mot-cle": motCle,
         "indice": indice.toString()
     }
 
@@ -139,6 +151,7 @@ async function initialisation() {
     while (VerifierBasPageVisible()) {
         await defilement()
     }
+    barRecherche.addEventListener("input", ChercherEncheres)
 
 }
 

@@ -10,6 +10,22 @@
             <h1 class="my-3">Le royaume des enchères</h1>
             <p><strong><i>Peu importe ce que vous voulez, vous trouverez!</i></strong></p>
         </div>
+        <form method="get" action="/ou-le-formulaire-doit-aller" novalidate>
+            <div>
+                <label class="visually-hidden" for="recherche">Rechercher</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">🔍</div>
+                    </div>
+                    <input type="search" id="recherche" name="recherche" placeholder="Enchère cherchée">
+                </div>
+                <span id="chargement" class="d-none">
+                    <img src="/static/img/chargement.gif" id="img-chargement-ajax" alt="Chargement en cours"/>
+                    Chargement en cours ...
+                </span>
+                <span id="erreur"></span>
+            </div>
+        </form>
         <div class="section-accueil" id="section-accueil">
 
         </div>

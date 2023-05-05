@@ -142,7 +142,7 @@ def get_enchere(conn, identifiant):
     """Retourne une enchère en fonction de l'id en paramètre"""
     with conn.get_curseur() as curseur:
         curseur.execute(
-            "SELECT * FROM `enchere` WHERE id_enchere = %(id)s",
+            "SELECT * FROM `enchere` WHERE id_enchere = %(id)s ",
             {
                 "id": identifiant
             }
@@ -151,6 +151,31 @@ def get_enchere(conn, identifiant):
         verifier_si_enchere_active(enchere)
         return enchere
 
+
+def chercher_encheres(conn, mot_cle, indice, est_admin):
+    """Permets de chercher des enchères"""
+    with conn.get_curseur() as curseur:
+        if est_admin:
+            curseur.execute(
+                    "SELECT * FROM enchere WHERE titre LIKE %(mot_cle)s"
+                    " ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s ",
+                    {
+                        "mot_cle": f"%{mot_cle}%",
+                        "indice": indice
+                    }
+                )
+            encheres = curseur.fetchall()
+        else:
+            curseur.execute(
+                    "SELECT * FROM enchere WHERE est_supprimee = 0 AND titre LIKE %(mot_cle)s"
+                    " ORDER BY date_limite DESC LIMIT 15 OFFSET %(indice)s ",
+                    {
+                        "mot_cle": f"%{mot_cle}%",
+                        "indice": indice
+                    }
+                )
+            encheres = curseur.fetchall()
+        return encheres
 
 def get_encheres_utilisateur(conn, id_utilisateur):
     """Retourne toutes les enchères d'un utilisateur"""
