@@ -21,11 +21,17 @@ let controleur = null;
 let indice = 0
 let motCle
 
-
+/**
+ * Permets d'afficher une enchère reçue dans la section des enchères
+ * @param enchere
+ */
 function afficherEncheres(enchere) {
+    //Pour la card
     const card = document.createElement("div")
     card.classList.add("card")
     card.classList.add("card-enchere")
+
+    //Pour le header de la Card
     const cardHeader = document.createElement("div")
     cardHeader.classList.add("card-header")
     const titre = document.createElement("h5")
@@ -45,6 +51,8 @@ function afficherEncheres(enchere) {
         cardHeader.append(texteInactive)
         cardHeader.classList.add("enchere-inactive")
     }
+
+    //Pour le body de la card
     const cardBody = document.createElement("div")
     cardBody.classList.add("card-body")
     const imgEnchere = document.createElement("img")
@@ -53,8 +61,9 @@ function afficherEncheres(enchere) {
     imgEnchere.alt = "Image pour l'enchere" + enchere.titre
     const description = document.createElement("p")
     description.append(enchere.description)
-    cardBody.append(imgEnchere)
-    cardBody.append(description)
+    cardBody.append(imgEnchere, description)
+
+    //Pour le Footer de la card
     const cardFooter = document.createElement("div")
     cardFooter.classList.add("card-footer")
     if (enchere.est_supprimee === 1 || !enchere.est_active)
@@ -69,22 +78,28 @@ function afficherEncheres(enchere) {
     lienEnchere.classList.add("stretched-link")
     lienEnchere.append("Voir cette enchère")
     cardFooter.append(dateLimite, lienEnchere)
+
+    //Mise en place de la card
     card.append(cardHeader,cardBody,cardFooter)
     sectEncheres.append(card)
 }
 
-
+/**
+ * Permets de chercher les encheres dans la BD
+ * @returns {Promise<void>}
+ */
 async function ChercherEncheres() {
-    let motCle
-    if (barRecherche.value.length >= 3 )
+    if (barRecherche.value.length >= 3 && motCle !== barRecherche.value)
     {
         sectEncheres.innerHTML = ""
         indice = 0
         motCle = barRecherche.value
     }
-    else
+    else if (barRecherche.value.length === 0)
     {
         motCle = ""
+        sectEncheres.innerHTML = ""
+        indice = 0
     }
     if (controleur != null) {
         // Annuler la requête précédente, car on lancera une nouvelle requête
@@ -133,7 +148,10 @@ function VerifierBasPageVisible()
     return (innerHeight + scrollY) >= 0.9 * document.body.offsetHeight
 }
 
-
+/**
+ * Permets de gerer les évenements lors d'un scroll down
+ * @returns {Promise<void>}
+ */
 async function defilement() {
     if (VerifierBasPageVisible()) {
         await ChercherEncheres()
