@@ -18,7 +18,7 @@ def chercher_encheres():
             est_admin = False
     else:
         est_admin = False
-    if not mot_cle:
+    if not mot_cle or mot_cle == "":
         with bd.creer_connexion() as conn:
             encheres = bd.get_encheres(conn, indice, est_admin)
             return jsonify(encheres)

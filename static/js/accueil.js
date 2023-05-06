@@ -120,13 +120,22 @@ async function ChercherEncheres() {
             parametres,
             controleur
         );
-        for (const enchere of encheres) {
-            afficherEncheres(enchere)
-            indice++
+        if(Object.entries(encheres).length === 0)
+        {
+            const accueil = document.getElementById("section-accueil");
+            accueil.innerHTML = "";
+            let pRechercheVide = document.createElement("h3");
+            pRechercheVide.innerHTML = "Aucun élément ne correspond à votre recherche.";
+            accueil.append(pRechercheVide);
+        }
+        else
+        {
+            for (const enchere of encheres) {
+                afficherEncheres(enchere)
+                indice++
+            }
         }
         controleur = null
-
-
     } catch (err) {
         if (err.name === "AbortError") {
             console.log("Une requête Ajax a été annulée")
