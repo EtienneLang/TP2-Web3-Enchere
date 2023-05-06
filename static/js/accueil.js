@@ -12,6 +12,7 @@ const barRecherche = document.getElementById("recherche")
 const chargement = document.getElementById("chargement");
 const sectEncheres = document.getElementById("section-accueil")
 const piedDePage = document.getElementById("sect-footer")
+const alerteRecherche = document.getElementById("alerte-recherche");
 const nbEncheresDemandees = 15
 
 /**
@@ -98,7 +99,6 @@ async function ChercherEncheres() {
     else if (barRecherche.value.length === 0)
     {
         motCle = ""
-        sectEncheres.innerHTML = ""
         indice = 0
     }
     if (controleur != null) {
@@ -114,6 +114,7 @@ async function ChercherEncheres() {
 
     controleur = new AbortController()
     try {
+
         const encheres = await envoyerRequeteAjax(
             "/api/recherche",
             "GET",
@@ -122,20 +123,22 @@ async function ChercherEncheres() {
         );
         if(Object.entries(encheres).length === 0)
         {
-            const accueil = document.getElementById("section-accueil");
-            accueil.innerHTML = "";
+            alerteRecherche.innerHTML = "";
             let pRechercheVide = document.createElement("h3");
             pRechercheVide.innerHTML = "Aucun élément ne correspond à votre recherche.";
-            accueil.append(pRechercheVide);
+            alerteRecherche.append(pRechercheVide);
         }
         else
         {
+            if (alerteRecherche.firstChild !== null) {
+                alerteRecherche.removeChild(alerteRecherche.firstChild);
+            }
             for (const enchere of encheres) {
                 afficherEncheres(enchere)
                 indice++
             }
         }
-        controleur = null
+        controleur = null;
     } catch (err) {
         if (err.name === "AbortError") {
             console.log("Une requête Ajax a été annulée")
