@@ -102,8 +102,7 @@ async function ChercherEncheres() {
         indice = 0
     }
     if (controleur != null) {
-        // Annuler la requête précédente, car on lancera une nouvelle requête
-        // à chaque input et on ne veut plus le résultat de la requête précédente.
+        //on attend que la dernière requète soit completé pour en envoyer une autre
         return;
     }
 
