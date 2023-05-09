@@ -38,7 +38,8 @@
                 {% endif %}
             {% endif %}
             {% if session and session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
-                <form id="form-mise" action="#" method="POST" data-id-enchere="{{ enchere.id_enchere }}" data-id-utilisateur="{{ session.utilisateur.id_utilisateur }}"  novalidate>
+                <span id="span-meilleur-miseur" data-id-utilisateur="{{ session.utilisateur.id_utilisateur }}"></span>
+                <form id="form-mise" action="#" method="POST" data-id-enchere="{{ enchere.id_enchere }}" novalidate>
                     <div class="d-flex">
                         <div class="mt-1">
                             {% if enchere.mise_max %}
