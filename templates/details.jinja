@@ -19,7 +19,7 @@
             {% endif %}
             {% if enchere.mise_max %}
                 {% if  enchere.est_active %}
-                    <h3>Mise la plus haute pour cette enchère : {{ enchere.mise_max }}$</h3>
+                    <h3>Mise la plus haute pour cette enchère : <span id="span-mise-max">{{ enchere.mise_max }}$</span></h3>
                     {% if session and enchere.fk_vendeur == session.utilisateur.id_utilisateur %}
                         <p>La mise a été fait par {{ enchere.miseur }}</p>
                     {% endif %}
@@ -38,15 +38,15 @@
                 {% endif %}
             {% endif %}
             {% if session and session.utilisateur and enchere.est_active and enchere.fk_vendeur != session.utilisateur.id_utilisateur%}
-                <form action="/encheres/{{ enchere.id_enchere }}/miser" method="POST" novalidate>
+                <form id="form-mise" action="#" method="POST" data-id-enchere="{{ enchere.id_enchere }}" data-id-utilisateur="{{ session.utilisateur.id_utilisateur }}"  novalidate>
                     <div class="d-flex">
                         <div class="mt-1">
                             {% if enchere.mise_max %}
                                 <input class="{{ classe_mise }}" type="number" min="{{ enchere.mise_max }}" name="txt_mise" id="txt_mise" placeholder="Entrez votre mise">
-                                <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
+                                <div id="feedback-mise" class="invalid-feedback">{{ texte_erreur_mise }}</div>
                             {% else %}
                                 <input class="{{ classe_mise }}" type="number" min="0" name="txt_mise" id="txt_mise" placeholder="Entrez votre mise">
-                                <div class="invalid-feedback">{{ texte_erreur_mise }}</div>
+                                <div id="feedback-mise" class="invalid-feedback">{{ texte_erreur_mise }}</div>
                             {% endif %}
                         </div>
                         <button type="submit" class="btn btn-primary mx-3">Miser</button>

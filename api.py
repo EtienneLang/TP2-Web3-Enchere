@@ -52,4 +52,14 @@ def miser(id_enchere):
         else:
             bd.ajouter_mise(conn, session["utilisateur"]["id_utilisateur"], id_enchere, mise_montant)
             app.logger.info("Ajout d'une mise sur l'enchère")
-    return
+        return bd.get_mise_max(conn, id_enchere)
+
+
+@bp_api.route("/<int:id_enchere>/misemax")
+def get_mise_max(id_enchere):
+    with bd.creer_connexion() as conn:
+        enchere = bd.get_enchere(conn, id_enchere)
+        if not enchere:
+            abort(404)
+        mise_max = bd.get_mise_max(conn, id_enchere)
+        return jsonify(mise_max)
