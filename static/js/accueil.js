@@ -99,7 +99,6 @@ async function ChercherEncheres() {
     else if (barRecherche.value.length === 0)
     {
         motCle = ""
-        indice = 0
     }
     if (controleur != null) {
         //on attend que la dernière requète soit completé pour en envoyer une autre
@@ -136,6 +135,7 @@ async function ChercherEncheres() {
                 afficherEncheres(enchere)
                 indice++
             }
+
         }
         controleur = null;
     } catch (err) {
