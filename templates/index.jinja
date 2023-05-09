@@ -17,7 +17,9 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">🔍</div>
                     </div>
-                    <input type="search" id="recherche" name="recherche" placeholder="Enchère cherchée">
+
+                    <input type="search" id="recherche" name="recherche" list="datalisteRecherche" placeholder="Enchère cherchée">
+                     <datalist id="datalisteRecherche"></datalist>
                 </div>
                 <span id="chargement" class="d-none">
                     <img src="/static/img/chargement.gif" id="img-chargement-ajax" alt="Chargement en cours"/>

@@ -8,11 +8,12 @@
 /**
  * Constantes globales
  * */
-const barRecherche = document.getElementById("recherche")
+const barRecherche = document.getElementById("recherche");
 const chargement = document.getElementById("chargement");
-const sectEncheres = document.getElementById("section-accueil")
-const piedDePage = document.getElementById("sect-footer")
+const sectEncheres = document.getElementById("section-accueil");
+const piedDePage = document.getElementById("sect-footer");
 const alerteRecherche = document.getElementById("alerte-recherche");
+const datalistRecherche = document.getElementById("datalisteRecherche");
 const nbEncheresDemandees = 15
 
 /**
@@ -90,8 +91,10 @@ function afficherEncheres(enchere) {
  * @returns {Promise<void>}
  */
 async function ChercherEncheres() {
+    let caracteresMin = false;
     if (barRecherche.value.length >= 3 && motCle !== barRecherche.value)
     {
+        caracteresMin = true;
         sectEncheres.innerHTML = ""
         indice = 0
         motCle = barRecherche.value
@@ -112,30 +115,36 @@ async function ChercherEncheres() {
 
     controleur = new AbortController()
     try {
-
         const encheres = await envoyerRequeteAjax(
             "/api/recherche",
             "GET",
             parametres,
             controleur
         );
-        if(Object.entries(encheres).length === 0)
+
+        if(Object.entries(encheres).length === 0 && caracteresMin === true)
         {
             alerteRecherche.innerHTML = "";
             let pRechercheVide = document.createElement("h3");
             pRechercheVide.innerHTML = "Aucun élément ne correspond à votre recherche.";
             alerteRecherche.append(pRechercheVide);
+            supprimerDataliste();
         }
         else
         {
+            supprimerDataliste();
             if (alerteRecherche.firstChild !== null) {
                 alerteRecherche.removeChild(alerteRecherche.firstChild);
             }
-            for (const enchere of encheres) {
-                afficherEncheres(enchere)
+             for (const enchere of encheres) {
+                 if (caracteresMin === true) {
+                    let option = document.createElement("option");
+                    option.setAttribute("value", enchere.titre);
+                    datalistRecherche.append(option);
+                 }
+                afficherEncheres(enchere);
                 indice++
             }
-
         }
         controleur = null;
     } catch (err) {
@@ -169,7 +178,11 @@ async function defilement() {
     }
 }
 
-
+function supprimerDataliste(){
+    while(datalistRecherche.firstChild !== null){
+        datalistRecherche.removeChild(datalistRecherche.firstChild)
+    }
+}
 /**
  * Initialisation de la page
  */
