@@ -8,6 +8,7 @@
 /**
  * Constantes globales
  * */
+const formRecherche = document.getElementById("form-recherche")
 const barRecherche = document.getElementById("recherche");
 const chargement = document.getElementById("chargement");
 const sectEncheres = document.getElementById("section-accueil");
@@ -121,7 +122,10 @@ async function ChercherEncheres() {
             parametres,
             controleur
         );
-
+        if (encheres.length < nbEncheresDemandees)
+            piedDePage.classList.remove("d-none")
+        else
+            piedDePage.classList.add("d-none")
         if(Object.entries(encheres).length === 0 && caracteresMin === true)
         {
             alerteRecherche.innerHTML = "";
@@ -183,18 +187,25 @@ function supprimerDataliste(){
         datalistRecherche.removeChild(datalistRecherche.firstChild)
     }
 }
+
+function CancellerRecherche(e)
+{
+    //Mène nul part quand on pèse sur enter
+    e.preventDefault()
+}
+
 /**
  * Initialisation de la page
  */
 async function initialisation() {
 
     window.addEventListener('scroll', defilement)
-    piedDePage.className = "d-none"
+    piedDePage.classList.add("d-none")
     while (VerifierBasPageVisible()) {
         await defilement()
     }
     barRecherche.addEventListener("input", ChercherEncheres)
-
+    formRecherche.addEventListener("submit", CancellerRecherche)
 }
 
 window.addEventListener('load', initialisation)
