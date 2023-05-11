@@ -75,7 +75,8 @@ function afficherEncheres(enchere) {
         cardFooter.classList.add("enchere-inactive")
     }
     const dateLimite = document.createElement("p")
-    dateLimite.append("Date limite : " + enchere.date_limite)
+    const date = new Date(enchere.date_limite)
+    dateLimite.append("Date limite : " + date.getFullYear() + "-"+ date.getMonth() + "-" + date.getDate())
     const lienEnchere = document.createElement("a")
     lienEnchere.href = "/encheres/" + enchere.id_enchere
     lienEnchere.classList.add("card-link")
@@ -95,7 +96,7 @@ function afficherEncheres(enchere) {
 async function ChercherEncheres() {
     if (barRecherche.value.length >= caracteresMin && motCle !== barRecherche.value)
     {
-        sectEncheres.innerHTML = "";
+        sectEncheres.replaceChildren()
         indice = 0;
         motCle = barRecherche.value;
     }

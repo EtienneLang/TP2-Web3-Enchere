@@ -10,6 +10,34 @@ header nav a {
   font-size: 20px;
 }
 
+.masquer {
+  display: none;
+}
+
+#suggestions .suggestions {
+  background-color: white;
+  width: 200px;
+  position: absolute;
+  border: 1px solid gray;
+  display: none;
+}
+#suggestions .afficher {
+  display: block;
+}
+#suggestions .suggestions > ul {
+  color: gray;
+  padding-left: 0;
+  margin: 0;
+  list-style-type: none;
+  cursor: default;
+}
+#suggestions .suggestions > ul li:hover {
+  background-color: lightblue;
+}
+#suggestions .sortie {
+  min-height: 100px;
+}
+
 .section-accueil {
   display: flex;
   flex-wrap: wrap;
