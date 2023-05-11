@@ -23,7 +23,7 @@ const nbEncheresDemandees = 15
 let controleur = null;
 let indice = 0
 let motCle
-let caracteresMin = false;
+let caracteresMin = 3;
 
 /**
  * Permets d'afficher une enchère reçue dans la section des enchères
@@ -93,17 +93,15 @@ function afficherEncheres(enchere) {
  * @returns {Promise<void>}
  */
 async function ChercherEncheres() {
-    caracteresMin = false;
-    if (barRecherche.value.length >= 3 && motCle !== barRecherche.value)
+    if (barRecherche.value.length >= caracteresMin && motCle !== barRecherche.value)
     {
-        caracteresMin = true;
-        sectEncheres.innerHTML = ""
-        indice = 0
-        motCle = barRecherche.value
+        sectEncheres.innerHTML = "";
+        indice = 0;
+        motCle = barRecherche.value;
     }
     else if (barRecherche.value.length === 0)
     {
-        motCle = ""
+        motCle = "";
     }
     if (controleur != null) {
         //on attend que la dernière requète soit completé pour en envoyer une autre
@@ -127,19 +125,15 @@ async function ChercherEncheres() {
             piedDePage.classList.remove("d-none")
         else
             piedDePage.classList.add("d-none")
-        if(Object.entries(encheres).length === 0 && caracteresMin === true)
+        if(Object.entries(encheres).length === 0 && barRecherche.value.length >= caracteresMin)
         {
             divSuggestions.replaceChildren();
             divSuggestions.classList.remove("afficher");
-            alerteRecherche.innerHTML = "";
-            let pRechercheVide = document.createElement("h3");
-            pRechercheVide.innerHTML = "Aucun élément ne correspond à votre recherche.";
-            alerteRecherche.append(pRechercheVide);
-            supprimerDatalist();
-
+            alerteRecherche.classList.remove("d-none");
         }
         else
         {
+            alerteRecherche.classList.add("d-none");
             divSuggestions.replaceChildren();
             const ul = document.createElement("ul");
             divSuggestions.append(ul);
@@ -149,16 +143,18 @@ async function ChercherEncheres() {
             else {
                 divSuggestions.classList.remove("afficher");
             }
-
+            let i = 0;
             for (const enchere of encheres) {
-                if (caracteresMin === true) {
+                if (barRecherche.value.length >= caracteresMin && i < 5) {
                     const li = document.createElement("li");
                     li.innerHTML = "<a href='/encheres/" + enchere.id_enchere + "'>" + enchere.titre + "</a>";
-                    li.setAttribute("class", "p-1");
+                    //On pourrais ajouter un Streshed link ici
+                    li.classList.add("p-1");
                     ul.append(li);
                 }
                 afficherEncheres(enchere);
                 indice++
+                i++;
             }
         }
         controleur = null;
@@ -193,9 +189,13 @@ async function defilement() {
     }
 }
 
-function supprimerDatalist(){
-    while(datalistRecherche.firstChild !== null){
-        datalistRecherche.removeChild(datalistRecherche.firstChild)
+function gererClicFenetre(evenement) {
+    const clicDansDivision = divSuggestions.contains(evenement.target);
+
+    if (!clicDansDivision) {
+        divSuggestions.replaceChildren()
+        divSuggestions.classList.remove("afficher")
+        document.removeEventListener("click", gererClicFenetre)
     }
 }
 
@@ -217,6 +217,8 @@ async function initialisation() {
     }
     barRecherche.addEventListener("input", ChercherEncheres)
     formRecherche.addEventListener("submit", CancellerRecherche)
+    //Pour fermer la liste de suggestions quand on clique ailleurs, je ne sais pas si window est le meilleur endroit
+    window.addEventListener("click", gererClicFenetre)
 }
 
 window.addEventListener('load', initialisation)
