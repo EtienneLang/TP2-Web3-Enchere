@@ -175,6 +175,8 @@ def chercher_encheres(conn, mot_cle, indice, est_admin):
                     }
                 )
             encheres = curseur.fetchall()
+        for e in encheres:
+            verifier_si_enchere_active(e)
         return encheres
 
 def get_encheres_utilisateur(conn, id_utilisateur):
