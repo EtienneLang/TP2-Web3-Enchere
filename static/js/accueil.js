@@ -14,7 +14,7 @@ const chargement = document.getElementById("chargement");
 const sectEncheres = document.getElementById("section-accueil");
 const piedDePage = document.getElementById("sect-footer");
 const alerteRecherche = document.getElementById("alerte-recherche");
-const datalistRecherche = document.getElementById("datalisteRecherche");
+const divSuggestions = document.getElementById("div-suggestions");
 const nbEncheresDemandees = 15
 
 /**
@@ -23,6 +23,7 @@ const nbEncheresDemandees = 15
 let controleur = null;
 let indice = 0
 let motCle
+let caracteresMin = false;
 
 /**
  * Permets d'afficher une enchère reçue dans la section des enchères
@@ -92,7 +93,7 @@ function afficherEncheres(enchere) {
  * @returns {Promise<void>}
  */
 async function ChercherEncheres() {
-    let caracteresMin = false;
+    caracteresMin = false;
     if (barRecherche.value.length >= 3 && motCle !== barRecherche.value)
     {
         caracteresMin = true;
@@ -128,24 +129,34 @@ async function ChercherEncheres() {
             piedDePage.classList.add("d-none")
         if(Object.entries(encheres).length === 0 && caracteresMin === true)
         {
+            divSuggestions.replaceChildren();
+            divSuggestions.classList.remove("afficher");
             alerteRecherche.innerHTML = "";
             let pRechercheVide = document.createElement("h3");
             pRechercheVide.innerHTML = "Aucun élément ne correspond à votre recherche.";
             alerteRecherche.append(pRechercheVide);
-            supprimerDataliste();
+            supprimerDatalist();
+
         }
         else
         {
-            supprimerDataliste();
-            if (alerteRecherche.firstChild !== null) {
-                alerteRecherche.removeChild(alerteRecherche.firstChild);
+            divSuggestions.replaceChildren();
+            const ul = document.createElement("ul");
+            divSuggestions.append(ul);
+            if (barRecherche.value.length >= 3) {
+                divSuggestions.classList.add("afficher");
             }
-             for (const enchere of encheres) {
-                 if (caracteresMin === true) {
-                    let option = document.createElement("option");
-                    option.setAttribute("value", enchere.titre);
-                    datalistRecherche.append(option);
-                 }
+            else {
+                divSuggestions.classList.remove("afficher");
+            }
+
+            for (const enchere of encheres) {
+                if (caracteresMin === true) {
+                    const li = document.createElement("li");
+                    li.innerHTML = "<a href='/encheres/" + enchere.id_enchere + "'>" + enchere.titre + "</a>";
+                    li.setAttribute("class", "p-1");
+                    ul.append(li);
+                }
                 afficherEncheres(enchere);
                 indice++
             }
@@ -182,7 +193,7 @@ async function defilement() {
     }
 }
 
-function supprimerDataliste(){
+function supprimerDatalist(){
     while(datalistRecherche.firstChild !== null){
         datalistRecherche.removeChild(datalistRecherche.firstChild)
     }

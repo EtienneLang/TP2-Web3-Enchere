@@ -10,6 +10,34 @@ header
         a
             font-size: 20px
 
+.masquer
+    display: none
+
+#suggestions
+    .suggestions
+        background-color: white
+        width: 200px
+        position: absolute
+        border: 1px solid gray
+        display: none
+
+    .afficher
+        display: block
+
+    .suggestions > ul
+        color: gray
+        padding-left: 0
+        margin: 0
+        list-style-type: none
+        cursor: default
+
+    .suggestions > ul li:hover
+        background-color: lightblue
+
+    .sortie
+        @extend .alert, .alert-light !optional
+        min-height: 100px
+
 .section-accueil
     display: flex
     flex-wrap: wrap

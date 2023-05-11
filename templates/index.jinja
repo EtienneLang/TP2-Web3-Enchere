@@ -12,16 +12,16 @@
         </div>
         <div class="d-flex justify-content-center">
             <form method="get" id="form-recherche" action="#" novalidate>
-                <div>
+                <div id="suggestions">
                     <label class="visually-hidden" for="recherche">Rechercher</label>
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text">🔍</div>
                         </div>
-
-                        <input type="search" id="recherche" name="recherche" list="datalisteRecherche" placeholder="Enchère cherchée">
-                         <datalist id="datalisteRecherche"></datalist>
+                        <input type="search" id="recherche" name="recherche" placeholder="Enchère cherchée">
                     </div>
+                    <div id="div-suggestions" class="suggestions masquer" style= "z-index:1000"></div>
+
                     <span id="chargement" class="d-none">
                         <img src="/static/img/chargement.gif" id="img-chargement-ajax" alt="Chargement en cours"/>
                         Chargement en cours ...
