@@ -24,6 +24,7 @@ let controleur = null;
 let indice = 0
 let motCle
 let caracteresMin = 3;
+let rechargementPage = false;
 
 /**
  * Permets d'afficher une enchère reçue dans la section des enchères
@@ -103,6 +104,16 @@ async function ChercherEncheres() {
     else if (barRecherche.value.length === 0)
     {
         motCle = "";
+        if (rechargementPage)
+        {
+            rechargementPage = false;
+            sectEncheres.innerHTML = "";
+            indice = 0;
+        }
+    }
+    else
+    {
+        rechargementPage = true;
     }
     if (controleur != null) {
         //on attend que la dernière requète soit completé pour en envoyer une autre
