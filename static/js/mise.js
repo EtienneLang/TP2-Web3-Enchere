@@ -12,6 +12,9 @@ const champMise = document.getElementById("txt_mise")
 const divFeedback = document.getElementById("feedback-mise")
 const spanMiseMax = document.getElementById("span-mise-max")
 const spanMeilleurMiseur = document.getElementById("span-meilleur-miseur")
+const chargement = document.getElementById("chargement");
+const confirmation = document.getElementById("confirmation");
+
 /**
  * Variables gloabales
  */
@@ -110,6 +113,7 @@ async function validerMise() {
 async function miserSurEnchere(e) {
     e.preventDefault()
     if (await validerMise()) {
+        chargement.classList.remove("d-none");
         if (controleurMise != null) {
             //on attend que la dernière requète soit completé pour en envoyer une autre
             champMise.classList.add("is-invalid")
@@ -120,6 +124,8 @@ async function miserSurEnchere(e) {
             "txt_mise": champMise.value
         }
         controleurMise = new AbortController()
+        //attendre 2 secondes avant de faire la requète
+        await new Promise(r => setTimeout(r, 2000));
         try {
             const miseMax = await envoyerRequeteAjax(
                 "/api/miser/" + formMise.dataset.idEnchere,
@@ -127,18 +133,34 @@ async function miserSurEnchere(e) {
                 parametres,
                 controleurMise
             );
-            champMise.value = ""
-            await ajusterMiseMax()
+            champMise.value = "";
+            await ajusterMiseMax();
             controleurMise = null;
+            chargement.classList.add("d-none");
+            CreeConfirmation();
         } catch (err) {
             console.error("Erreur lors d'une mise");
             console.error(err);
             champMise.classList.add("is-invalid")
             divFeedback.innerHTML = "<p>Erreur lors de votre mise</p>"
+            chargement.classList.add("d-none");
         }
     }
 }
-
+function CreeConfirmation(prix, nom) {
+    confirmation.innerHTML = "";
+    const div = document.createElement("div");
+    div.classList.add("alert", "alert-success", "alert-dismissible");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("data-bs-dismiss", "alert");
+    button.classList.add("btn-close");
+    const p = document.createElement("p");
+    p.classList.add("mb-0");
+    p.innerHTML = "<strong>Bien joué!</strong> Votre mise a bien été effectuée.";
+    div.append(button, p);
+    confirmation.append(div);
+}
 /**
  * Initialisation de la page
  * @returns {Promise<void>}

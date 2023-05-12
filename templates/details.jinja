@@ -53,6 +53,10 @@
                         <button type="submit" class="btn btn-primary mx-3">Miser</button>
                     </div>
                 </form>
+                <span id="chargement" class="d-none">
+                        <img src="/static/css/img/chargement.gif" id="img-chargement-ajax" alt="Chargement en cours"/>
+                        Chargement en cours ...
+                    </span>
             {% elif enchere.est_active and not session.utilisateur %}
                 <p>Pour miser, veuillez <a href="/compte/authentifier">vous connecter</a></p>
             {% endif %}

@@ -10,12 +10,11 @@
  * */
 const formRecherche = document.getElementById("form-recherche")
 const barRecherche = document.getElementById("recherche");
-const chargement = document.getElementById("chargement");
 const sectEncheres = document.getElementById("section-accueil");
 const piedDePage = document.getElementById("sect-footer");
 const alerteRecherche = document.getElementById("alerte-recherche");
 const divSuggestions = document.getElementById("div-suggestions");
-const nbEncheresDemandees = 15
+const nbEncheresDemandees = 15;
 
 /**
  * Variables globales
@@ -97,13 +96,14 @@ function afficherEncheres(enchere) {
 async function ChercherEncheres() {
     if (barRecherche.value.length >= caracteresMin && motCle !== barRecherche.value)
     {
-        sectEncheres.replaceChildren()
+        sectEncheres.replaceChildren();
         indice = 0;
         motCle = barRecherche.value;
     }
     else if (barRecherche.value.length === 0)
     {
         motCle = "";
+        //Si on a vidé la barre de recherche, on vide la section des enchères
         if (rechargementPage)
         {
             rechargementPage = false;
